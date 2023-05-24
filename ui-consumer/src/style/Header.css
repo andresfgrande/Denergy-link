@@ -1,0 +1,59 @@
+.header {
+    display: flex;
+    align-items: center;
+    height: 65px;
+    background: linear-gradient(90deg, #248318 1.18%, #248318 100%);
+    color: white;
+    padding: 20px;
+    box-shadow: 0px 0px 8px rgba(0,0,0,.6);
+  }
+  
+  .header--image {
+    height: 100%;
+    margin-right: 10px;
+  }
+  
+  .header--title {
+    font-size: 1.25rem;
+    margin-right: auto;
+  }
+  
+  .header--connect {
+    font-size: 0.95rem;
+    font-weight: 500;
+    border-radius: 5px;
+    border: 2px solid white;
+    padding-left: 0.7em;
+    padding-right: 0.7em;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    cursor: pointer;
+    border: 2px solid rgba(255, 255, 255, 0.329);
+    border-radius: 41px;
+  }
+  .header--connect:hover {
+   background: #19640f;
+  }
+  .header--connected {
+    font-size: 0.95rem;
+    font-weight: 500;
+    border-radius: 5px;
+    border: 2px solid white;
+    padding-left: 0.7em;
+    padding-right: 0.7em;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    cursor: pointer;
+    border: 2px solid rgba(255,255,255,0.329);
+    border-radius: 41px;
+  }
+  .header--connected:hover {
+    background: #19640f;
+   }
+  .header--connected--title{
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+  .header--connected--address{
+    font-weight: 400;
+  }
