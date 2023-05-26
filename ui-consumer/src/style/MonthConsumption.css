@@ -1,0 +1,54 @@
+
+
+.month--consumption{
+
+}
+
+.month--data{
+    display: flex;
+    gap: 4em;
+    justify-content: center;
+}
+
+.energy--consumed{
+    border-radius: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    padding: 3.5em;
+    max-width: 280px;
+    width: 50%;
+}
+
+.month--bill{
+    border-radius: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    padding: 2.5em;
+    max-width: 280px;
+    width: 50%;
+}
+
+.consumption--table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    max-width: 1200px;
+    margin: auto;
+  }
+  
+  .consumption--table th,
+  .consumption--table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+  }
+  
+  .consumption--table th {
+    /*background-color: #4caf50;*/
+    background: linear-gradient(90deg, #248318 1.18%, #248318 100%);
+    color: white;
+  }
+  
+  .consumption--table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
