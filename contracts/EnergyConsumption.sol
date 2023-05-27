@@ -8,7 +8,7 @@ contract EnergyConsumption {
 
     struct MonthlyData {
         uint256 consumedEnergy;
-        uint256 billAmount;
+        uint256 billAmount; //wei Euros
         bool paid;
     }
 
@@ -16,7 +16,7 @@ contract EnergyConsumption {
         mapping(uint256 => MonthlyData) monthlyData;
         uint256[] consumptionMonths;
         mapping(uint256 => bool) hasMonth;
-        uint256 totalUnpaidBillAmount;
+        uint256 totalUnpaidBillAmount; //wei Euros
     }
 
     address payable public owner;
@@ -53,12 +53,12 @@ contract EnergyConsumption {
 
     function getLatestEthPrice() public view returns (uint256) {
         (, int256 price, , , ) = priceFeed.latestRoundData();
-        return uint256(price);
+        return uint256(price); // wei USD
     }
 
     function getLatestEnergyPrice() public pure returns (uint256){
-        //Example value, this will retrieved form external adapter
-        return 85; //USD
+          //Example value, this will be retrieved form external adapter
+        return 172040000000000000; // "wei euros" per kWh, 0,17204 €/kWh
     }
 
     function registerEnergyConsumption(address _consumer, uint256 _consumedEnergy) public onlyOwner {
@@ -69,10 +69,10 @@ contract EnergyConsumption {
         uint256 hour = getCurrentHour(timestamp);
         uint256 key = year * 100 + month;
 
-        uint256 ratePerKWh = getLatestEnergyPrice(); //in USD
-        uint256 billAmount = _consumedEnergy * ratePerKWh; //in USD
+        uint256 ratePerKWh = getLatestEnergyPrice(); //in wei Euros
+        uint256 billAmount = _consumedEnergy * ratePerKWh; //in wei Euros
 
-        //Updating billAmount in USD
+        //Updating billAmount in wei Euros
         consumers[_consumer].monthlyData[key].consumedEnergy += _consumedEnergy;
         consumers[_consumer].monthlyData[key].billAmount += billAmount;
         consumers[_consumer].monthlyData[key].paid = false;
