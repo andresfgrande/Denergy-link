@@ -1,8 +1,6 @@
 
 
-.month--consumption{
 
-}
 
 .month--data{
     display: flex;
@@ -14,7 +12,7 @@
     border-radius: 20px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
-    padding: 3.5em;
+    
     max-width: 280px;
     width: 50%;
 }
@@ -23,32 +21,55 @@
     border-radius: 20px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
-    padding: 2.5em;
+    
     max-width: 280px;
     width: 50%;
 }
 
-.consumption--table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    max-width: 1200px;
-    margin: auto;
+.month--paid{
+  border-radius: 20px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  background-color: rgba(46, 179, 75, 0.26);
+  max-width: 280px;
+  width: 50%;
+}
+.month--pending--payment{
+    border-radius: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    background-color: rgba(37, 89, 199, 0.452);
+    max-width: 280px;
+    width: 50%;
+    cursor: pointer;
   }
-  
-  .consumption--table th,
-  .consumption--table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: center;
+  .month--pending--payment:hover{
+   
+    position: relative;
+    background-color: rgba(37, 88, 199, 0.63);
+    box-shadow: 0 12px 18px 0 rgba(0,0,0,0.2);
   }
-  
-  .consumption--table th {
-    /*background-color: #4caf50;*/
-    background: linear-gradient(90deg, #248318 1.18%, #248318 100%);
-    color: white;
+  .month--paid .payment--image{
+    width: 50px;
+    height: auto;
   }
-  
-  .consumption--table tr:nth-child(even) {
-    background-color: #f2f2f2;
+ 
+  .month--pending--payment .payment--image{
+    width: 55px;
+    height: auto;
+  }
+   
+  .month--pending--payment .payment--image--processing{
+    width: 55px;
+    height: auto;
+    animation: rotation 2s infinite linear;
+  }
+
+  @keyframes rotation {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(359deg);
+    }
   }

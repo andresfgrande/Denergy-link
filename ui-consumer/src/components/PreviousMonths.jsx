@@ -3,20 +3,22 @@ import Web3 from 'web3';
 import EnergyConsumptionAbi from '../Abi/EnergyConsumptionAbi.json';
 
 
-export default function PreviousMonths({setYear, setMonth, address, year, month}){
+export default function PreviousMonths({setYear, setMonth, setTotalConsumption ,address, year, month, totalConsumption}){
   
       const [rows, setRows] = useState([]);
+
 
   useEffect(() => {
     if (window.ethereum) {
       const web3 = new Web3(window.ethereum);
       const contractAbi = EnergyConsumptionAbi;
-      const contractAddress = "0x74BfF1a72f3d5C34Be7a03D9d8C75b98A50A12C1";
+      const contractAddress = "0x200cdb515DBA84671b865E16d631e4c76A986B18";
       const contract = new web3.eth.Contract(contractAbi, contractAddress);
 
       const fetchMonthlyData = async () => {
         const consumptionMonths = await contract.methods.getConsumptionMonths(address).call();
 
+        let total = 0;
         const rowsData = [];
         for (let month of consumptionMonths) {
           const year = Math.floor(month / 100);
@@ -29,18 +31,17 @@ export default function PreviousMonths({setYear, setMonth, address, year, month}
             bill: web3.utils.fromWei(billAmount.toString(), 'ether'),
             paid: paid
           }
+          total += Number(consumedEnergy);  // Update total energy consumption
+          console.log(total);
           rowsData.push(row);
         }
+        setTotalConsumption(total);  // Save total energy consumption to state
         setRows(rowsData);
       }
       fetchMonthlyData();
     }
-  }, [address]);
+  }, [address, year,month]);
 
-  const setCurrentMonth = (month, year)=>{
-    setYear(year);
-    setMonth(month);
-  }
     
     return(
         <div>
@@ -56,11 +57,21 @@ export default function PreviousMonths({setYear, setMonth, address, year, month}
       </thead>
       <tbody>
         {rows.map((row, index) => (
-          <tr key={index}  onClick={() => { setMonth(4); setYear(2022); }}>
-            <td>{row.month}</td>
-            <td>{row.consumption}</td>
-            <td>{row.bill}</td>
-            <td>{row.paid ? 'Yes' : 'No'}</td>
+          <tr className="data--item--month" key={index}  onClick={() => { setMonth(row.month); setYear(row.year);}}>
+            <td>{row.month} / {row.year}</td>
+            <td>{row.consumption} kWh</td>
+            <td>{Number.parseFloat(row.bill).toFixed(2)} €</td>
+            <td>{row.paid ? 
+              <img 
+              src="./src/assets/paid.png"
+              className="payment--image--table"
+              />
+            : 
+            <img 
+            src="./src/assets/pending-payment.png"
+            className="pending--payment--image--table"
+            />
+            }</td>
           </tr>
         ))}
       </tbody>

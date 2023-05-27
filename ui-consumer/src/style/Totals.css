@@ -1,0 +1,22 @@
+.totals--data{
+    display: flex;
+    gap: 4em;
+    justify-content: center;
+}
+
+.totals--unpaid{
+    border-radius: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    background-color: rgba(219, 0, 0, 0.28);
+    max-width: 280px;
+    width: 50%;
+  }
+  .totals--consumed{
+    border-radius: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    
+    max-width: 280px;
+    width: 50%;
+  }
