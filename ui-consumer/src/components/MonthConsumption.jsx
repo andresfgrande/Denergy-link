@@ -3,11 +3,11 @@ import Web3 from 'web3';
 import EnergyConsumptionAbi from '../Abi/EnergyConsumptionAbi.json';
 
 
-export default function MonthConsumption({setYear, setMonth, address, year, month}){
+export default function MonthConsumption({setYear, setMonth, setTotalUnpaid, setEthPrice, address, year, month, totalUnpaid, ethPrice}){
 
   const [energy, setEnergy] = useState("");
   const [bill, setBill] = useState("");
-  const [ethPrice, setEthPrice] = useState("");
+  //const [ethPrice, setEthPrice] = useState("");
   const [paid, setPaid] = useState(false);
   const [processing, setProcessing] = useState(false);
   
@@ -22,12 +22,20 @@ export default function MonthConsumption({setYear, setMonth, address, year, mont
       const currentMonth = month 
       const { consumedEnergy, billAmount, paid } = await contract.methods.getMonthlyData(address, currentYear, currentMonth).call();
       setEnergy(consumedEnergy);
-      setBill(web3.utils.fromWei(billAmount.toString(), 'ether'));  // Assuming billAmount is in Wei
+      setBill(web3.utils.fromWei(billAmount.toString(), 'ether'));  // Bill amount in wei
       setPaid(paid);
 
        // Get latest Ethereum price
       const latestEthPrice = await contract.methods.getLatestEthPrice().call();
-      setEthPrice(latestEthPrice / 1.e8);  // Assuming you have a state variable setEthPrice for this
+      setEthPrice(latestEthPrice / 1.e8); 
+
+      const fetchUnpaidTotal = async () => {
+        const unpaidTotalWei = await contract.methods.getCustomerTotalUnpaidBillAmount(address).call();
+        const unpaidTotalEther = web3.utils.fromWei(unpaidTotalWei.toString(), 'ether');
+        console.log('test2',address);
+        setTotalUnpaid(unpaidTotalEther);
+      }
+      fetchUnpaidTotal();
 
     }
   }
@@ -54,7 +62,7 @@ export default function MonthConsumption({setYear, setMonth, address, year, mont
         from: account,
         value: billInWei,
         gasPrice: gasPrice, 
-        gas: 300000 // this value might need to be adjusted based on the complexity of the contract function
+        gas: 300000 
       };
       
       contract.methods.payMonthBill(year, month).send(options)
@@ -107,7 +115,7 @@ export default function MonthConsumption({setYear, setMonth, address, year, mont
     if(address){
       loadEnergyData(address);
     }
-  }, [address, year, month])
+  }, [address, year, month, totalUnpaid])
 
   return(
     <div>
@@ -118,8 +126,8 @@ export default function MonthConsumption({setYear, setMonth, address, year, mont
                 <h1>{energy} kWh</h1>
             </div>
             <div className="month--bill">
-                <h1>{Number.parseFloat(bill).toFixed(2)}€</h1>
-                <h1>{Number.parseFloat(bill/ethPrice).toFixed(4)}ETH</h1>
+                <h2>{Number.parseFloat(bill).toFixed(2)}€</h2>
+                <h2>{Number.parseFloat(bill/ethPrice).toFixed(4)}ETH</h2>
             </div>
 
             {paid ? 

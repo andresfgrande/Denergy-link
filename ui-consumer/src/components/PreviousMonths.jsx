@@ -3,7 +3,7 @@ import Web3 from 'web3';
 import EnergyConsumptionAbi from '../Abi/EnergyConsumptionAbi.json';
 
 
-export default function PreviousMonths({setYear, setMonth, setTotalConsumption ,address, year, month, totalConsumption}){
+export default function PreviousMonths({setYear, setMonth, setTotalConsumption, setTotalUnpaid, address, year, month, totalConsumption, totalUnpaid}){
   
       const [rows, setRows] = useState([]);
 
@@ -31,51 +31,60 @@ export default function PreviousMonths({setYear, setMonth, setTotalConsumption ,
             bill: web3.utils.fromWei(billAmount.toString(), 'ether'),
             paid: paid
           }
-          total += Number(consumedEnergy);  // Update total energy consumption
+          total += Number(consumedEnergy);  
           console.log(total);
           rowsData.push(row);
         }
-        setTotalConsumption(total);  // Save total energy consumption to state
+        setTotalConsumption(total);  
         setRows(rowsData);
       }
       fetchMonthlyData();
     }
-  }, [address, year,month]);
+  }, [address, year,month, totalUnpaid]);
 
-    
+  const handleRowClick = (row) => {
+    setMonth(row.month);
+    setYear(row.year);
+    scrollToTopSmoothly();
+  };
+
+  const scrollToTopSmoothly = () => {
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  };  
+
     return(
-        <div>
-            <h1>Previous months</h1>
-            <table className="consumption--table">
-      <thead>
-        <tr>
-          <th>Month</th>
-          <th>Consumption</th>
-          <th>Bill</th>
-          <th>Paid</th>
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map((row, index) => (
-          <tr className="data--item--month" key={index}  onClick={() => { setMonth(row.month); setYear(row.year);}}>
-            <td>{row.month} / {row.year}</td>
-            <td>{row.consumption} kWh</td>
-            <td>{Number.parseFloat(row.bill).toFixed(2)} €</td>
-            <td>{row.paid ? 
-              <img 
-              src="./src/assets/paid.png"
-              className="payment--image--table"
-              />
-            : 
-            <img 
-            src="./src/assets/pending-payment.png"
-            className="pending--payment--image--table"
-            />
-            }</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+        <div className="previous--months--container">
+                  <h1>Previous months</h1>
+                  <table className="consumption--table">
+            <thead>
+              <tr>
+                <th>Month</th>
+                <th>Consumption</th>
+                <th>Bill</th>
+                <th>Paid</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row, index) => (
+                <tr className="data--item--month" key={index}  onClick={() => handleRowClick(row)}>
+                  <td>{row.month} / {row.year}</td>
+                  <td>{row.consumption} kWh</td>
+                  <td>{Number.parseFloat(row.bill).toFixed(2)} €</td>
+                  <td>{row.paid ? 
+                    <img 
+                    src="./src/assets/paid.png"
+                    className="payment--image--table"
+                    />
+                  : 
+                  <img 
+                  src="./src/assets/pending-payment.png"
+                  className="pending--payment--image--table"
+                  />
+                  }</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
      
     )

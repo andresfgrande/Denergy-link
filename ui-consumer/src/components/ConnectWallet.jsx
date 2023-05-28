@@ -1,8 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect ,useState} from "react";
 import detectEthereumProvider from '@metamask/detect-provider';
 import Web3 from 'web3';
 
-export default function ConnectWallet({ setAddress, setBalance , address}) {
+export default function ConnectWallet({ setAddress, setBalance , address, balance}) {
+
+  const [copySuccess, setCopySuccess] = useState("");
+
     useEffect(() => {
 
         if (window.ethereum && window.ethereum.selectedAddress) {
@@ -15,7 +18,7 @@ export default function ConnectWallet({ setAddress, setBalance , address}) {
     const provider = await detectEthereumProvider();
 
     if (provider) {
-      startApp(provider); // Initialize your app
+      startApp(provider); 
     } else {
       console.log('Please install MetaMask!');
     }
@@ -28,7 +31,7 @@ export default function ConnectWallet({ setAddress, setBalance , address}) {
 
     const web3Instance = new Web3(window.ethereum);
 
-    // Request account access if needed
+   //Request account access
     try {
       await window.ethereum.enable();
     } catch (error) {
@@ -48,11 +51,38 @@ export default function ConnectWallet({ setAddress, setBalance , address}) {
     setBalance(web3Instance.utils.fromWei(ethBalance, 'ether'));
   };
 
+  const copyAddressToClipboard = async () => {
+    try {
+        await navigator.clipboard.writeText(address);
+        setCopySuccess("Copied to clipboard!");
+    } catch (err) {
+      setCopySuccess("Failed to copy to clipboard!");
+    }
+  }
+  useEffect(() => {
+    if (copySuccess){
+        setTimeout(() => {
+            setCopySuccess("");
+        }, 3000);
+    }
+}, [copySuccess]);
+
   return (
     address ?
-    <div className="header--connected">
+    <div className="header--connected" >
+      <p onClick={copyAddressToClipboard} className="address--copy">
         <span className="header--connected--title">Wallet: </span>
         <span className="header--connected--address">{address.substring(0,6) + "..." + address.substring(address.length - 4)}</span>
+        {copySuccess && 
+                    <span className="tooltip">
+                        {copySuccess}
+                    </span>}
+      </p>
+      <p>
+      <span className="header--connected--title">Balance: </span>
+      <span className="header--connected--address">{Number.parseFloat(balance).toFixed(4)}</span>
+      </p>
+        
     </div>
     :
     <div className="header--connect" onClick={connectWallet}>Connect Wallet</div>
