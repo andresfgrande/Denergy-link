@@ -1,6 +1,11 @@
+.totals--container{
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
 .totals--data{
     display: flex;
-    gap: 4em;
+    gap: 2em;
     justify-content: center;
 }
 

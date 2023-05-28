@@ -1,3 +1,9 @@
+.previous--months--container{
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+
 .consumption--table {
     width: 100%;
     border-collapse: collapse;

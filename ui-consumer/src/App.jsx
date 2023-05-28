@@ -15,28 +15,44 @@ function App() {
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth() + 1);
   const [totalConsumption, setTotalConsumption] = useState(0);
+  const [totalUnpaid, setTotalUnpaid] = useState(0);
+  const [ethPrice, setEthPrice] = useState(0);
 
   return (
     <>
       <div>
-        <Header  setAddress={setAddress} setBalance={setBalance} address={address}></Header>
+        <Header  setAddress={setAddress} setBalance={setBalance} address={address} balance={balance}></Header>
         <MonthConsumption 
         setYear={setYear}
         setMonth={setMonth}
+        setTotalUnpaid={setTotalUnpaid} 
+        setEthPrice={setEthPrice}
         address={address}
         year={year}
         month={month}
+        totalUnpaid={totalUnpaid}
+        ethPrice={ethPrice}
         > 
         </MonthConsumption >
-        <Totals setTotalConsumption={setTotalConsumption} address={address} totalConsumption={totalConsumption}></Totals>
+        <Totals 
+        setTotalConsumption={setTotalConsumption} 
+        setTotalUnpaid={setTotalUnpaid} 
+        address={address} 
+        totalConsumption={totalConsumption}
+        totalUnpaid={totalUnpaid}
+        ethPrice={ethPrice}
+        >
+        </Totals>
         <PreviousMonths 
         setYear={setYear}
         setMonth={setMonth}
         setTotalConsumption={setTotalConsumption}
+        setTotalUnpaid={setTotalUnpaid}
         address={address}
         year={year}
         month={month}
         totalConsumption={totalConsumption}
+        totalUnpaid={totalUnpaid}
         ></PreviousMonths>
       </div>
     </>

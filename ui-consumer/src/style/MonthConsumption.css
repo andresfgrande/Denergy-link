@@ -1,10 +1,13 @@
 
-
+.month--consumption{
+  margin-left: 1em;
+  margin-right: 1em;
+}
 
 
 .month--data{
     display: flex;
-    gap: 4em;
+    gap: 2em;
     justify-content: center;
 }
 

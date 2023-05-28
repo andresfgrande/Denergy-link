@@ -35,25 +35,38 @@
    background: #19640f;
   }
   .header--connected {
+    position: relative;
     font-size: 0.95rem;
     font-weight: 500;
     border-radius: 5px;
     border: 2px solid white;
-    padding-left: 0.7em;
-    padding-right: 0.7em;
+    padding-left: 1.1em;
+    padding-right: 1.1em;
     padding-top: 0.2em;
     padding-bottom: 0.2em;
     cursor: pointer;
     border: 2px solid rgba(255,255,255,0.329);
-    border-radius: 41px;
+    border-radius: 40px;
+  }
+  .header--connected p{
+    margin: 0;
+  }
+  .address--copy .header--connected--address:hover{
+    font-weight: bold;
   }
   .header--connected:hover {
     background: #19640f;
    }
   .header--connected--title{
-    font-weight: 500;
+   font-weight: 500;
     font-size: 0.9rem;
   }
   .header--connected--address{
     font-weight: 400;
+  }
+  .tooltip{
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+    top: 55px;
   }
