@@ -22,7 +22,9 @@ contract EnergyConsumption {
     address payable public owner;
     mapping(address => Consumer) public consumers;
 
-    AggregatorV3Interface internal priceFeed;
+    AggregatorV3Interface internal priceFeedEth;
+    AggregatorV3Interface internal priceFeedEur;
+
 
     event EnergyConsumptionRegistered(
         address indexed consumer,
@@ -46,19 +48,62 @@ contract EnergyConsumption {
         _;
     }
 
-    constructor(address _priceFeed) {
+    /**
+     * Network: Mumbai
+     * Aggregator: ETH/USD
+     * Address: 0x0715A7794a1dc8e42615F059dD6e406A6594651A
+
+     * Network: Mumbai
+     * Aggregator: EUR/USD
+     * Address: 0x7d7356bF6Ee5CDeC22B216581E48eCC700D0497A
+     */
+    constructor() {
         owner = payable(msg.sender);
-        priceFeed = AggregatorV3Interface(_priceFeed);
+        priceFeedEth = AggregatorV3Interface(0x0715A7794a1dc8e42615F059dD6e406A6594651A);
+        priceFeedEur = AggregatorV3Interface(0x7d7356bF6Ee5CDeC22B216581E48eCC700D0497A);
     }
 
     function getLatestEthPrice() public view returns (uint256) {
-        (, int256 price, , , ) = priceFeed.latestRoundData();
+        (, int256 price, , , ) = priceFeedEth.latestRoundData();
         return uint256(price); // wei USD
     }
 
-    function getLatestEnergyPrice() public pure returns (uint256){
-          //Example value, this will be retrieved form external adapter
-        return 172040000000000000; // "wei euros" per kWh, 0,17204 €/kWh
+    function getLatestEurPrice() public view returns (uint256) {
+        (, int256 price, , , ) = priceFeedEur.latestRoundData();
+        return uint256(price); // wei USD
+    }
+
+    function getLatestEnergyPrice() public view returns (uint256){
+        //Example value, this will be retrieved form external adapter
+
+        uint256 energyPriceEur = 172040000000000000; //in wei Euros 0,17204 €/kWh
+        uint256 eurUsdRate = getLatestEurPrice(); //in wei USD
+
+        return (energyPriceEur * eurUsdRate) / 10**8; // in wei USD per kWh, 0,184 $/kWh
+    }
+
+    function registerEnergyConsumptionTest(address _consumer, uint256 _consumedEnergy, uint256 timestamp) public onlyOwner {
+        uint256 year = getCurrentYear(timestamp);
+        uint256 month = getCurrentMonth(timestamp);
+        uint256 day = getCurrentDay(timestamp);
+        uint256 hour = getCurrentHour(timestamp);
+        uint256 key = year * 100 + month;
+
+        uint256 ratePerKWh = getLatestEnergyPrice(); //in wei Euros
+        uint256 billAmount = _consumedEnergy * ratePerKWh; //in wei Euros
+
+        //Updating billAmount in wei Euros
+        consumers[_consumer].monthlyData[key].consumedEnergy += _consumedEnergy;
+        consumers[_consumer].monthlyData[key].billAmount += billAmount;
+        consumers[_consumer].monthlyData[key].paid = false;
+        consumers[_consumer].totalUnpaidBillAmount += billAmount;
+
+        if (!consumers[_consumer].hasMonth[key]) {
+            consumers[_consumer].consumptionMonths.push(key);
+            consumers[_consumer].hasMonth[key] = true;
+        }
+      
+        emit EnergyConsumptionRegistered(_consumer, _consumedEnergy, key, day, hour, block.timestamp);
     }
 
     function registerEnergyConsumption(address _consumer, uint256 _consumedEnergy) public onlyOwner {
@@ -90,6 +135,10 @@ contract EnergyConsumption {
         return consumers[_consumer].consumptionMonths;
     }
 
+    function getCustomerTotalUnpaidBillAmount(address _consumer) public view returns (uint256){
+        return consumers[_consumer].totalUnpaidBillAmount;
+    }
+
     function getMonthlyData(address _consumer, uint256 _year, uint256 _month) public view returns (uint256 consumedEnergy, uint256 billAmount, bool paid) {
         uint256 key = _year * 100 + _month;
         consumedEnergy = consumers[_consumer].monthlyData[key].consumedEnergy;
@@ -102,14 +151,15 @@ contract EnergyConsumption {
 
         uint256 key = _year * 100 + _month;
         uint256 billAmount = consumers[msg.sender].monthlyData[key].billAmount;
+        uint256 billAmountInWeiEther = billAmount / getLatestEthPrice(); // conversion from weiEuro to weiEther
 
         require(!consumers[msg.sender].monthlyData[key].paid, "Bill is already paid");
-        require(msg.value >= billAmount, "Payment is less than the outstanding bill amount");
-        
+        require(msg.value >= billAmountInWeiEther, "Payment is less than the outstanding bill amount");
+
         owner.transfer(msg.value);
         consumers[msg.sender].totalUnpaidBillAmount -= billAmount;
         consumers[msg.sender].monthlyData[key].paid = true;
-        
+
         emit PaymentReceived(msg.sender, _year, _month, msg.value, block.timestamp);
     }
 
