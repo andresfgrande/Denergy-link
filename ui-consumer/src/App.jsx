@@ -53,6 +53,7 @@ function App() {
         month={month}
         totalConsumption={totalConsumption}
         totalUnpaid={totalUnpaid}
+        ethPrice={ethPrice}
         ></PreviousMonths>
       </div>
     </>

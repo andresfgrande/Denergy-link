@@ -1,6 +1,7 @@
 .totals--container{
   margin-left: 1em;
   margin-right: 1em;
+  margin-bottom: 1.5em;
 }
 
 .totals--data{
@@ -8,7 +9,19 @@
     gap: 2em;
     justify-content: center;
 }
-
+.totals--unpaid{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
+.totals--unpaid p, .totals--unpaid h2, .totals--unpaid h3{
+  margin: 0;
+}
 .totals--unpaid{
     border-radius: 20px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
@@ -17,6 +30,10 @@
     max-width: 280px;
     width: 50%;
   }
+  .totals--unpaid .title--unpaid{
+    margin-bottom: 0.5em;
+    font-weight: 300;
+  }
   .totals--consumed{
     border-radius: 20px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
@@ -24,4 +41,13 @@
     
     max-width: 280px;
     width: 50%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
   }

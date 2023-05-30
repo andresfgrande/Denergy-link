@@ -15,7 +15,7 @@ export default function MonthConsumption({setYear, setMonth, setTotalUnpaid, set
     if (window.ethereum) {
       const web3 = new Web3(window.ethereum);
       const contractAbi = EnergyConsumptionAbi;
-      const contractAddress = "0x200cdb515DBA84671b865E16d631e4c76A986B18";
+      const contractAddress = "0x7b5224aFCa82727e1aE0f188261f9aD943687dca";
       const contract = new web3.eth.Contract(contractAbi, contractAddress);
       
       const currentYear = year;
@@ -45,7 +45,7 @@ export default function MonthConsumption({setYear, setMonth, setTotalUnpaid, set
     if (window.ethereum) {
       const web3 = new Web3(window.ethereum);
       const contractAbi = EnergyConsumptionAbi;
-      const contractAddress = "0x200cdb515DBA84671b865E16d631e4c76A986B18";
+      const contractAddress = "0x7b5224aFCa82727e1aE0f188261f9aD943687dca";
       const contract = new web3.eth.Contract(contractAbi, contractAddress);
 
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -118,7 +118,7 @@ export default function MonthConsumption({setYear, setMonth, setTotalUnpaid, set
   }, [address, year, month, totalUnpaid])
 
   return(
-    <div>
+    <div className="month--container--consumption">
         <div className="month--consumption">
                 <h1> Energy consumption - {getMonthName(month)} {year}</h1>
         <div className="month--data">
@@ -126,13 +126,13 @@ export default function MonthConsumption({setYear, setMonth, setTotalUnpaid, set
                 <h1>{energy} kWh</h1>
             </div>
             <div className="month--bill">
-                <h2>{Number.parseFloat(bill).toFixed(2)}€</h2>
-                <h2>{Number.parseFloat(bill/ethPrice).toFixed(4)}ETH</h2>
+                <h2>{Number.parseFloat(bill/ethPrice).toFixed(4)} ETH</h2>
+                <h3>${Number.parseFloat(bill).toFixed(2)}</h3>
             </div>
 
             {paid ? 
               <div className="month--paid">
-                <h2>Paid</h2>
+                <h2 className="title--paid">Paid</h2>
                 <img 
                 src="./src/assets/paid.png"
                 className="payment--image"
@@ -147,7 +147,7 @@ export default function MonthConsumption({setYear, setMonth, setTotalUnpaid, set
                 src="./src/assets/processing-payment.png"
                 className="payment--image--processing"
                 />
-                <p>Processing payment...</p>
+                <p className="text--processing">Processing payment...</p>
                 </div>
                 
                 :

@@ -9,12 +9,12 @@ export default function Totals({setTotalConsumption, setTotalUnpaid, address, to
       <h1>Total consumed</h1>
       <div className="totals--data">
       <div className="totals--consumed">
-        <h2>{totalConsumption} kWh</h2>
+        <h1>{totalConsumption} kWh</h1>
         </div>
         <div className="totals--unpaid">
             <p className="title--unpaid">Total unpaid bill</p>
-            <h2>{Number.parseFloat(totalUnpaid).toFixed(2)} €</h2>
-            <h2>{Number.parseFloat(totalUnpaid/ethPrice).toFixed(4)}ETH</h2> 
+            <h2>{Number.parseFloat(totalUnpaid/ethPrice).toFixed(4)} ETH</h2> 
+            <h3>${Number.parseFloat(totalUnpaid).toFixed(2)} </h3>
         </div>
        </div>
     </div>

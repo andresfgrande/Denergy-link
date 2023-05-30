@@ -3,7 +3,7 @@ import Web3 from 'web3';
 import EnergyConsumptionAbi from '../Abi/EnergyConsumptionAbi.json';
 
 
-export default function PreviousMonths({setYear, setMonth, setTotalConsumption, setTotalUnpaid, address, year, month, totalConsumption, totalUnpaid}){
+export default function PreviousMonths({setYear, setMonth, setTotalConsumption, setTotalUnpaid, address, year, month, totalConsumption, totalUnpaid, ethPrice}){
   
       const [rows, setRows] = useState([]);
 
@@ -12,7 +12,7 @@ export default function PreviousMonths({setYear, setMonth, setTotalConsumption, 
     if (window.ethereum) {
       const web3 = new Web3(window.ethereum);
       const contractAbi = EnergyConsumptionAbi;
-      const contractAddress = "0x200cdb515DBA84671b865E16d631e4c76A986B18";
+      const contractAddress = "0x7b5224aFCa82727e1aE0f188261f9aD943687dca";
       const contract = new web3.eth.Contract(contractAbi, contractAddress);
 
       const fetchMonthlyData = async () => {
@@ -69,7 +69,7 @@ export default function PreviousMonths({setYear, setMonth, setTotalConsumption, 
                 <tr className="data--item--month" key={index}  onClick={() => handleRowClick(row)}>
                   <td>{row.month} / {row.year}</td>
                   <td>{row.consumption} kWh</td>
-                  <td>{Number.parseFloat(row.bill).toFixed(2)} €</td>
+                  <td>{Number.parseFloat(row.bill/ethPrice).toFixed(4)} ETH = ${Number.parseFloat(row.bill).toFixed(2)} </td>
                   <td>{row.paid ? 
                     <img 
                     src="./src/assets/paid.png"
