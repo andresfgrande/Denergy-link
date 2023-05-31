@@ -28,17 +28,14 @@ contract EnergyConsumption {
 
     event EnergyConsumptionRegistered(
         address indexed consumer,
+        uint256 indexed month,
         uint256 consumedEnergy,
-        uint256 month,
-        uint256 day,
-        uint256 hour,
         uint256 timestamp
     );
   
     event PaymentReceived(
         address indexed consumer,
-        uint256 year,
-        uint256 month,
+        uint256 indexed month,
         uint256 amount,
         uint256 timestamp
     );
@@ -85,8 +82,6 @@ contract EnergyConsumption {
     function registerEnergyConsumptionTest(address _consumer, uint256 _consumedEnergy, uint256 timestamp) public onlyOwner {
         uint256 year = getCurrentYear(timestamp);
         uint256 month = getCurrentMonth(timestamp);
-        uint256 day = getCurrentDay(timestamp);
-        uint256 hour = getCurrentHour(timestamp);
         uint256 key = year * 100 + month;
 
         uint256 ratePerKWh = getLatestEnergyPrice(); //in wei Euros
@@ -103,15 +98,13 @@ contract EnergyConsumption {
             consumers[_consumer].hasMonth[key] = true;
         }
       
-        emit EnergyConsumptionRegistered(_consumer, _consumedEnergy, key, day, hour, block.timestamp);
+        emit EnergyConsumptionRegistered(_consumer, key, _consumedEnergy, block.timestamp);
     }
 
     function registerEnergyConsumption(address _consumer, uint256 _consumedEnergy) public onlyOwner {
         uint256 timestamp = block.timestamp;
         uint256 year = getCurrentYear(timestamp);
         uint256 month = getCurrentMonth(timestamp);
-        uint256 day = getCurrentDay(timestamp);
-        uint256 hour = getCurrentHour(timestamp);
         uint256 key = year * 100 + month;
 
         uint256 ratePerKWh = getLatestEnergyPrice(); //in wei Euros
@@ -128,7 +121,7 @@ contract EnergyConsumption {
             consumers[_consumer].hasMonth[key] = true;
         }
       
-        emit EnergyConsumptionRegistered(_consumer, _consumedEnergy, key, day, hour, block.timestamp);
+        emit EnergyConsumptionRegistered(_consumer, key, _consumedEnergy, timestamp);
     }
 
     function getConsumptionMonths(address _consumer) public view returns (uint256[] memory){
@@ -160,7 +153,7 @@ contract EnergyConsumption {
         consumers[msg.sender].totalUnpaidBillAmount -= billAmount;
         consumers[msg.sender].monthlyData[key].paid = true;
 
-        emit PaymentReceived(msg.sender, _year, _month, msg.value, block.timestamp);
+        emit PaymentReceived(msg.sender, key, msg.value, block.timestamp);
     }
 
     function getCurrentYear(uint256 timestamp) public pure returns (uint256 year) {
