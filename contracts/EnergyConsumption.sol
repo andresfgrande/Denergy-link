@@ -3,6 +3,7 @@ pragma solidity ^0.8.0;
 
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 import "https://github.com/bokkypoobah/BokkyPooBahsDateTimeLibrary/blob/master/contracts/BokkyPooBahsDateTimeLibrary.sol";
+import "./EnergyProduction.sol";
 
 contract EnergyConsumption {
 
@@ -21,6 +22,8 @@ contract EnergyConsumption {
 
     address payable public owner;
     mapping(address => Consumer) public consumers;
+    // The address of the EnergyProduction contract
+    EnergyProduction public energyProductionContract;
 
     AggregatorV3Interface internal priceFeedEth;
     AggregatorV3Interface internal priceFeedEur;
@@ -54,10 +57,15 @@ contract EnergyConsumption {
      * Aggregator: EUR/USD
      * Address: 0x7d7356bF6Ee5CDeC22B216581E48eCC700D0497A
      */
-    constructor() {
+    constructor(address _addressEnergyProductionContract) {
         owner = payable(msg.sender);
         priceFeedEth = AggregatorV3Interface(0x0715A7794a1dc8e42615F059dD6e406A6594651A);
         priceFeedEur = AggregatorV3Interface(0x7d7356bF6Ee5CDeC22B216581E48eCC700D0497A);
+        energyProductionContract = EnergyProduction(_addressEnergyProductionContract);
+    }
+
+    function setAddressEnergyConsumptionContract(address _addressEnergyProductionContract) public onlyOwner{
+         energyProductionContract = EnergyProduction(_addressEnergyProductionContract);
     }
 
     function getLatestEthPrice() public view returns (uint256) {
@@ -97,6 +105,8 @@ contract EnergyConsumption {
             consumers[_consumer].consumptionMonths.push(key);
             consumers[_consumer].hasMonth[key] = true;
         }
+
+        energyProductionContract.registerConsumedEnergy(_consumedEnergy, key);
       
         emit EnergyConsumptionRegistered(_consumer, key, _consumedEnergy, block.timestamp);
     }
@@ -121,6 +131,8 @@ contract EnergyConsumption {
             consumers[_consumer].hasMonth[key] = true;
         }
       
+        energyProductionContract.registerConsumedEnergy(_consumedEnergy, key);
+
         emit EnergyConsumptionRegistered(_consumer, key, _consumedEnergy, timestamp);
     }
 
@@ -152,6 +164,8 @@ contract EnergyConsumption {
         owner.transfer(msg.value);
         consumers[msg.sender].totalUnpaidBillAmount -= billAmount;
         consumers[msg.sender].monthlyData[key].paid = true;
+
+        energyProductionContract.registerRevenue(billAmount, key);
 
         emit PaymentReceived(msg.sender, key, msg.value, block.timestamp);
     }

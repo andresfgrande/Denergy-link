@@ -17,6 +17,8 @@ contract EnergyProduction {
     uint256[] productionMonths;
 
     address payable public owner;
+    // The address of the EnergyConsumption contract
+    address public energyConsumptionContract;
 
     AggregatorV3Interface internal priceFeedEth;
     AggregatorV3Interface internal priceFeedEur;
@@ -45,6 +47,11 @@ contract EnergyProduction {
         _;
     }
 
+    modifier onlyEnergyConsumptionContract() {
+        require(msg.sender == energyConsumptionContract, "Caller is not the EnergyConsumption contract");
+        _;
+    }
+
     /**
      * Network: Mumbai
      * Aggregator: ETH/USD
@@ -60,7 +67,11 @@ contract EnergyProduction {
         priceFeedEur = AggregatorV3Interface(0x7d7356bF6Ee5CDeC22B216581E48eCC700D0497A);
     }
 
-     function getLatestEthPrice() public view returns (uint256) {
+    function setAddressEnergyConsumptionContract(address _addressEnergyConsumptionContract) public onlyOwner{
+        energyConsumptionContract = _addressEnergyConsumptionContract;
+    }
+
+    function getLatestEthPrice() public view returns (uint256) {
         (, int256 price, , , ) = priceFeedEth.latestRoundData();
         return uint256(price); // wei USD
     }
@@ -70,7 +81,7 @@ contract EnergyProduction {
         return uint256(price); // wei USD
     }
 
-    //OK                                       viene en kWh             viene en wei USD la calculo en el  server(cambio EUR/USD)
+    //                                        viene en kWh       viene en wei USD la calculo en el  server(cambio EUR/USD)
     function registerEnergyProduction(uint256 _energyProduced, uint256 _productionCost) public onlyOwner {
         uint256 timestamp = block.timestamp;
         uint256 year = getCurrentYear(timestamp);
@@ -83,21 +94,18 @@ contract EnergyProduction {
         emit EnergyProductionRegistered(key, _energyProduced, block.timestamp);
     }
 
-    //OK will be called from Energy consumption contract
-    function registerConsumedEnergy(uint256 _energyConsumed, uint256 _monthKey) public {
+    function registerConsumedEnergy(uint256 _energyConsumed, uint256 _monthKey) public onlyEnergyConsumptionContract{
         monthlyProductionData[_monthKey].energyConsumed += _energyConsumed; //in kWh
 
         emit EnergyConsumptionRegistered(_monthKey, _energyConsumed, block.timestamp);
     }
 
-    //OK will be called from Energy consumption contract
-    function registerRevenue(uint256 _paidBill, uint256 _monthKey) public{
+    function registerRevenue(uint256 _paidBill, uint256 _monthKey) public onlyEnergyConsumptionContract{
         monthlyProductionData[_monthKey].revenue += _paidBill; //in wei USD
 
         emit EnergyBillRegistered(_monthKey, _paidBill, block.timestamp);
     }
 
-    //OK
     function getMonthlyData(uint256 _year, uint256 _month) public view returns (uint256 energyProduced, uint256 energyConsumed, uint256 revenue, uint256 cost) {
         uint256 key = _year * 100 + _month;
         energyProduced = monthlyProductionData[key].energyProduced;
@@ -106,7 +114,7 @@ contract EnergyProduction {
         cost = monthlyProductionData[key].cost;
     }
 
-    //OK
+    //TODO setear variable
     function getProductionMonths() public view returns (uint256[] memory){
         return productionMonths;
     }
