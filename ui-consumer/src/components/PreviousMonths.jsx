@@ -12,7 +12,7 @@ export default function PreviousMonths({setYear, setMonth, setTotalConsumption, 
     if (window.ethereum) {
       const web3 = new Web3(window.ethereum);
       const contractAbi = EnergyConsumptionAbi;
-      const contractAddress = "0x7b5224aFCa82727e1aE0f188261f9aD943687dca";
+      const contractAddress = "0xa7A4299F3a914C3f0D8ab0835379A4C7648cC29a";
       const contract = new web3.eth.Contract(contractAbi, contractAddress);
 
       const fetchMonthlyData = async () => {
