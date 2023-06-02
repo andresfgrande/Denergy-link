@@ -7,15 +7,15 @@ export default function MonthConsumption({setYear, setMonth, setTotalUnpaid, set
 
   const [energy, setEnergy] = useState("");
   const [bill, setBill] = useState("");
-  //const [ethPrice, setEthPrice] = useState("");
   const [paid, setPaid] = useState(false);
   const [processing, setProcessing] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
   
   const loadEnergyData = async (address) => {
     if (window.ethereum) {
       const web3 = new Web3(window.ethereum);
       const contractAbi = EnergyConsumptionAbi;
-      const contractAddress = "0xa7A4299F3a914C3f0D8ab0835379A4C7648cC29a";
+      const contractAddress = "0xc4364bF88dA24A547658a25386bb49a2c08Ee609";
       const contract = new web3.eth.Contract(contractAbi, contractAddress);
       
       const currentYear = year;
@@ -41,41 +41,50 @@ export default function MonthConsumption({setYear, setMonth, setTotalUnpaid, set
   }
 
   const payBill = async () => {
-    setProcessing(true);
-    if (window.ethereum) {
-      const web3 = new Web3(window.ethereum);
-      const contractAbi = EnergyConsumptionAbi;
-      const contractAddress = "0xa7A4299F3a914C3f0D8ab0835379A4C7648cC29a";
-      const contract = new web3.eth.Contract(contractAbi, contractAddress);
+    let currentMonth = new Date().getMonth() + 1;
+    let currentYear = new Date().getFullYear();
 
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      const account = accounts[0];
-
-      // Get latest Ethereum price
-      const latestEthPrice = await contract.methods.getLatestEthPrice().call();
-      setEthPrice(latestEthPrice / 1.e8)
-
-      const billInWei = web3.utils.toWei((bill/ethPrice).toString(), 'ether');
-      const gasPrice = await web3.eth.getGasPrice();
+    //Just allow payments whn the month is ended
+    if(currentYear > year || (currentYear === year && currentMonth > month)){
+      setProcessing(true);
+      if (window.ethereum) {
+        const web3 = new Web3(window.ethereum);
+        const contractAbi = EnergyConsumptionAbi;
+        const contractAddress = "0xc4364bF88dA24A547658a25386bb49a2c08Ee609";
+        const contract = new web3.eth.Contract(contractAbi, contractAddress);
   
-      const options = {
-        from: account,
-        value: billInWei,
-        gasPrice: gasPrice, 
-        gas: 300000 
-      };
-      
-      contract.methods.payMonthBill(year, month).send(options)
-        .on('receipt', (receipt) => {
-          console.log(receipt);
-          setProcessing(false);
-          loadEnergyData(address);
-        })
-        .on('error', (error) => {
-          console.error(error);
-          setProcessing(false);
-        });
-    }
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const account = accounts[0];
+  
+        // Get latest Ethereum price
+        const latestEthPrice = await contract.methods.getLatestEthPrice().call();
+        setEthPrice(latestEthPrice / 1.e8)
+  
+        const billInWei = web3.utils.toWei((bill/ethPrice).toString(), 'ether');
+        const gasPrice = await web3.eth.getGasPrice();
+    
+        const options = {
+          from: account,
+          value: billInWei,
+          gasPrice: gasPrice, 
+          gas: 300000 
+        };
+        
+        contract.methods.payMonthBill(year, month).send(options)
+          .on('receipt', (receipt) => {
+            console.log(receipt);
+            setProcessing(false);
+            loadEnergyData(address);
+          })
+          .on('error', (error) => {
+            console.error(error);
+            setProcessing(false);
+          });
+      }
+    }else{
+      // If the current month is not yet ended, show the popup
+     setShowPopup(true);
+   }
     
   };
 
@@ -110,6 +119,15 @@ export default function MonthConsumption({setYear, setMonth, setTotalUnpaid, set
     }
   }
 
+  const goToCurrentMonth = () => {
+    setMonth(new Date().getMonth() + 1);
+    setYear(new Date().getFullYear());
+    scrollToTopSmoothly();
+  };
+
+  const closePopup = () => {
+    setShowPopup(false);
+  };
 
   useEffect(() => {
     if(address){
@@ -121,6 +139,9 @@ export default function MonthConsumption({setYear, setMonth, setTotalUnpaid, set
     <div className="month--container--consumption">
         <div className="month--consumption">
                 <h1> Energy consumption - {getMonthName(month)} {year}</h1>
+                <span className="button" onClick={() => goToCurrentMonth()}>
+                View current month
+              </span>
         <div className="month--data">
             <div className="energy--consumed">
                 <h1>{energy} kWh</h1>
@@ -163,7 +184,13 @@ export default function MonthConsumption({setYear, setMonth, setTotalUnpaid, set
            
         </div>
         </div> 
-       
+        {showPopup && 
+            <div className="backdrop" onClick={closePopup}>
+                <div className="popup">
+                    <button className="close-btn" onClick={closePopup}>X</button>
+                    <p>Payment will be allowed at the end of the month.</p>
+                </div>
+            </div>}
     </div>
   )
 }

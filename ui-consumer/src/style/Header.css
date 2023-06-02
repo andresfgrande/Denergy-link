@@ -6,6 +6,9 @@
     color: white;
     padding: 20px;
     box-shadow: 0px 0px 8px rgba(0,0,0,.6);
+    position: sticky;
+    top: 0;
+    z-index: 10;
   }
   
   .header--image {
