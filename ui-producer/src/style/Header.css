@@ -1,0 +1,75 @@
+.header {
+    display: flex;
+    align-items: center;
+    height: 65px;
+    background: linear-gradient(90deg, #093d88e8 1.18%, #093d88e8 100%);
+    color: white;
+    padding: 20px;
+    box-shadow: 0px 0px 8px rgba(0,0,0,.6);
+    position: sticky;
+    top: 0;
+  }
+  
+  
+  .header--image {
+    height: 100%;
+    margin-right: 10px;
+  }
+  
+  .header--title {
+    font-size: 1.25rem;
+    margin-right: auto;
+  }
+  
+  .header--connect {
+    font-size: 0.95rem;
+    font-weight: 500;
+    border-radius: 5px;
+    border: 2px solid white;
+    padding-left: 0.7em;
+    padding-right: 0.7em;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    cursor: pointer;
+    border: 2px solid rgba(255, 255, 255, 0.329);
+    border-radius: 41px;
+  }
+  .header--connect:hover {
+   background: #093d88cf;
+  }
+  .header--connected {
+    position: relative;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border-radius: 5px;
+    border: 2px solid white;
+    padding-left: 1.1em;
+    padding-right: 1.1em;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    cursor: pointer;
+    border: 2px solid rgba(255,255,255,0.329);
+    border-radius: 40px;
+  }
+  .header--connected p{
+    margin: 0;
+  }
+  .address--copy .header--connected--address:hover{
+    font-weight: bold;
+  }
+  .header--connected:hover {
+    background: #093d88cf;
+   }
+  .header--connected--title{
+   font-weight: 500;
+    font-size: 0.9rem;
+  }
+  .header--connected--address{
+    font-weight: 400;
+  }
+  .tooltip{
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+    top: 55px;
+  }

@@ -1,33 +1,68 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Header from "./components/Header"
+import MonthProduction from './components/MonthProduction';
+import PreviousMonths from './components/PreviousMonths';
+import './App.css';
+import './style/Header.css';
+import './style/MonthProduction.css';
+import './style/PreviousMonths.css';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [address, setAddress] = useState('');
+  const [balance, setBalance] = useState(0);
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [month, setMonth] = useState(new Date().getMonth() + 1);
+  const [energyProduced, setEnergyProduced] = useState(0);
+  const [energyConsumed, setEnergyConsumed] = useState(0);
+  const [cost, setCost] = useState(0);
+  const [revenue, setRevenue] = useState(0);
+  const [ethPrice, setEthPrice] = useState(0);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <div className='producer--container'>
+      <Header  setAddress={setAddress} setBalance={setBalance} address={address} balance={balance}></Header>
+      <MonthProduction
+      setAddress={setAddress}
+      setBalance={setBalance}
+      setEnergyProduced={setEnergyProduced}
+      setEnergyConsumed={setEnergyConsumed}
+      setCost={setCost}
+      setRevenue={setRevenue}
+      setYear={setYear}
+      setMonth={setMonth}
+      setEthPrice={setEthPrice}
+      address={address}
+      balance={balance}
+      energyProduced={energyProduced}
+      energyConsumed={energyConsumed}
+      cost={cost}
+      revenue={revenue}
+      year={year}
+      month={month}
+      ethPrice={ethPrice}
+      ></MonthProduction>
+      <PreviousMonths
+      setAddress={setAddress}
+      setBalance={setBalance}
+      setEnergyProduced={setEnergyProduced}
+      setEnergyConsumed={setEnergyConsumed}
+      setCost={setCost}
+      setRevenue={setRevenue}
+      setYear={setYear}
+      setMonth={setMonth}
+      setEthPrice={setEthPrice}
+      address={address}
+      balance={balance}
+      energyProduced={energyProduced}
+      energyConsumed={energyConsumed}
+      cost={cost}
+      revenue={revenue}
+      year={year}
+      month={month}
+      ethPrice={ethPrice}
+      ></PreviousMonths>
+     </div>
     </>
   )
 }

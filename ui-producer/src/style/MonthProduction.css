@@ -1,0 +1,124 @@
+.container--producer--info {
+    margin-top: 0.5em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5em;
+    margin-left: 1em;
+    margin-right: 1em;
+
+}
+.container--producer--info h2 {
+    margin-bottom: 0;
+}
+/*.energy--num{
+    font-size: 2.2em;
+}*/
+.energy--num--usd{
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.energy--num--eth{
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5em;
+    width: 100%;
+    max-width: 1000px;
+}
+
+
+.last--element {
+    grid-column: span 2;
+    width: 100%;
+    max-width: 484px;
+}
+.card--title{
+    margin-bottom: 0.5em ;
+}
+.card--profit{
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.card {
+   
+
+    border-radius: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 0.8em;
+    padding-right: 0.8em;
+    flex-direction: column;
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+ .card h1, .card h2 {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.card h3{
+    margin-top: 0;
+}
+.card--revenue{
+    background-color: rgba(37, 89, 199, 0.452);
+}
+.card--cost{
+    background-color: rgba(219, 0, 0, 0.28);
+}
+.card--profit{
+    background-color: rgba(46, 179, 75, 0.26);
+    padding-left: 0;
+    padding-right: 0;
+}
+.card--profit.negative{
+    background-color: rgba(219, 0, 0, 0.28);
+}
+.container--title{
+    margin-bottom: 0.3em;
+}
+.container--totals{
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+span.button {
+    display: inline-block;
+    background: linear-gradient(90deg, #093d88e8 1.18%, #093d88e8 100%);
+    color: #FFFFFF;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease 0s;
+    font-size: 18px;
+    line-height: 24px;
+    border: none;
+    text-align: center;
+    margin: 10px;
+    user-select: none;
+    box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+    margin-top: -1em;
+    margin-bottom: 0;
+}
+
+span.button:hover {
+    background: linear-gradient(90deg, #093d88e8 1.18%, #093d88e8 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+}
+
+span.button:active {
+    background: linear-gradient(90deg, #093d88e8 1.18%, #093d88e8 100%);
+    transform: translateY(1px);
+}
