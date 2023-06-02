@@ -154,6 +154,11 @@ contract EnergyConsumption {
     function payMonthBill(uint256 _year, uint256 _month) public payable {
         require(msg.value > 0, "Payment must be greater than 0");
 
+        uint256 currentYear = BokkyPooBahsDateTimeLibrary.getYear(block.timestamp);
+        uint256 currentMonth = BokkyPooBahsDateTimeLibrary.getMonth(block.timestamp);
+
+        require(currentYear > _year || (currentYear == _year && currentMonth > _month), "You can only pay for a month when it has ended");
+
         uint256 key = _year * 100 + _month;
         uint256 billAmount = consumers[msg.sender].monthlyData[key].billAmount;
         uint256 billAmountInWeiEther = billAmount / getLatestEthPrice(); // conversion from weiEuro to weiEther
@@ -169,6 +174,7 @@ contract EnergyConsumption {
 
         emit PaymentReceived(msg.sender, key, msg.value, block.timestamp);
     }
+
 
     function getCurrentYear(uint256 timestamp) public pure returns (uint256 year) {
         year = BokkyPooBahsDateTimeLibrary.getYear(timestamp);
