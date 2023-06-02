@@ -15,6 +15,7 @@ contract EnergyProduction {
 
     mapping(uint256 => ProductionData) public monthlyProductionData;
     uint256[] productionMonths;
+    mapping(uint256 => bool) hasMonth;
 
     address payable public owner;
     // The address of the EnergyConsumption contract
@@ -88,6 +89,27 @@ contract EnergyProduction {
         uint256 month = getCurrentMonth(timestamp);
         uint256 key = year * 100 + month;
 
+       if (!hasMonth[key]) {
+            productionMonths.push(key);
+            hasMonth[key] = true;
+        }
+
+        monthlyProductionData[key].energyProduced += _energyProduced;
+        monthlyProductionData[key].cost += _energyProduced * _productionCost; //in wei USD
+
+        emit EnergyProductionRegistered(key, _energyProduced, block.timestamp);
+    }
+
+    function registerEnergyProductionTest(uint256 _energyProduced, uint256 _productionCost, uint256 _timestamp) public onlyOwner {
+        uint256 year = getCurrentYear(_timestamp);
+        uint256 month = getCurrentMonth(_timestamp);
+        uint256 key = year * 100 + month;
+
+       if (!hasMonth[key]) {
+            productionMonths.push(key);
+            hasMonth[key] = true;
+        }
+
         monthlyProductionData[key].energyProduced += _energyProduced;
         monthlyProductionData[key].cost += _energyProduced * _productionCost; //in wei USD
 
@@ -114,7 +136,6 @@ contract EnergyProduction {
         cost = monthlyProductionData[key].cost;
     }
 
-    //TODO setear variable
     function getProductionMonths() public view returns (uint256[] memory){
         return productionMonths;
     }
