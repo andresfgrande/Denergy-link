@@ -9,43 +9,49 @@ export default function PreviousMonths({setAddress, setBalance, setEnergyProduce
     const [totals, setTotals] = useState({totalProduced: 0, totalConsumed: 0});
 
     useEffect(() => {
-      if (window.ethereum) {
-        const web3 = new Web3(window.ethereum);
-        const contractAbi = EnergyProductionAbi;
-        const contractAddress = "0x3b059F2aBd2A677406E04Bf379bF20C92e51CEe5";  // Update with the correct contract address
-        const contract = new web3.eth.Contract(contractAbi, contractAddress);
-  
-        const fetchMonthlyData = async () => {
-          const productionMonths = await contract.methods.getProductionMonths().call();
-  
-          let totalProduced = 0;
-          let totalConsumed = 0;
-          const rowsData = [];
-          for (let month of productionMonths) {
-            const year = Math.floor(month / 100);
-            const monthOfYear = month % 100;
-            const { energyProduced, energyConsumed, revenue, cost } = await contract.methods.getMonthlyData(year, monthOfYear).call();
-            const row = {
-              month: monthOfYear,
-              year: year,
-              produced: energyProduced,
-              consumed: energyConsumed,
-              revenue: web3.utils.fromWei(revenue.toString(), 'ether'),
-              cost: web3.utils.fromWei(cost.toString(), 'ether')
+      console.log('address: ', address);
+      console.log('rows: ', rows);
+      console.log('totals: ', totals);
+      if(address){
+        if (window.ethereum) {
+          const web3 = new Web3(window.ethereum);
+          const contractAbi = EnergyProductionAbi;
+          const contractAddress = "0x3b059F2aBd2A677406E04Bf379bF20C92e51CEe5";  // Update with the correct contract address
+          const contract = new web3.eth.Contract(contractAbi, contractAddress);
+    
+          const fetchMonthlyData = async () => {
+            const productionMonths = await contract.methods.getProductionMonths().call();
+    
+            let totalProduced = 0;
+            let totalConsumed = 0;
+            const rowsData = [];
+            for (let month of productionMonths) {
+              const year = Math.floor(month / 100);
+              const monthOfYear = month % 100;
+              const { energyProduced, energyConsumed, revenue, cost } = await contract.methods.getMonthlyData(year, monthOfYear).call();
+              const row = {
+                month: monthOfYear,
+                year: year,
+                produced: energyProduced,
+                consumed: energyConsumed,
+                revenue: web3.utils.fromWei(revenue.toString(), 'ether'),
+                cost: web3.utils.fromWei(cost.toString(), 'ether')
+              }
+              totalProduced += Number(energyProduced);
+              totalConsumed += Number(energyConsumed);  
+              rowsData.push(row);
             }
-            totalProduced += Number(energyProduced);
-            totalConsumed += Number(energyConsumed);  
-            rowsData.push(row);
+            let totals = {
+              totalProduced: totalProduced, 
+              totalConsumed: totalConsumed
+            }
+            setTotals(totals);
+            setRows(rowsData);
           }
-          let totals = {
-            totalProduced: totalProduced, 
-            totalConsumed: totalConsumed
-          }
-          setTotals(totals);
-          setRows(rowsData);
+          fetchMonthlyData();
         }
-        fetchMonthlyData();
       }
+      
     }, [address, year, month]);
   
     const handleRowClick = (row) => {
