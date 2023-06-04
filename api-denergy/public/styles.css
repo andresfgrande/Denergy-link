@@ -69,3 +69,6 @@ input {
     border: 1px solid #ddd;
     box-sizing: border-box; 
 }
+#processing1, #processing2, #processing3, #processing4{
+    text-align: center;
+}
