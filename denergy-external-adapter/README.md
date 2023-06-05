@@ -1,0 +1,1 @@
+# denergy-external-adapter
