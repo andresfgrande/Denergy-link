@@ -1,4 +1,3 @@
-//Initialization
 const express = require('express');
 const cors = require('cors');
 const Web3 = require('web3');
