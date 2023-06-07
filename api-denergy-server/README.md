@@ -1,4 +1,4 @@
-# Denergry API Server Documentation
+# Denergy-Link API Server Documentation
 
 This documentation provides an overview of the endpoints provided by our API.
 
@@ -16,9 +16,9 @@ To run this project locally, follow these steps:
 
 1. **Clone the repository**
 
-   You can clone the repository by running the following command in your terminal:
-
 2. **Install dependencies**
+
+    Go to the directory of the cloned repository
 
     ```bash
     npm install
