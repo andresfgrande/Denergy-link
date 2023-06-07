@@ -1,3 +1,5 @@
+const baseUrl = `${window.location.protocol}//${window.location.hostname}:5339`;
+
 /**
  * Simulation: call from IoT device for registering produced energy
  */
@@ -8,7 +10,7 @@ document.getElementById('energy-form').addEventListener('submit', function(event
     const processingElement = document.getElementById('processing1');
     processingElement.style.display = 'block';
 
-    fetch('http://localhost:3000/registerEnergyProduction', {
+    fetch(`${baseUrl}/registerEnergyProduction`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

@@ -1,3 +1,4 @@
+// Initialize values
 const express = require('express');
 const cors = require('cors');
 const Web3 = require('web3');
@@ -131,4 +132,5 @@ app.post('/registerEnergyConsumptionTest', async (req, res) => {
     }
 });
 
-app.listen(3000, () => console.log('App listening on port 3000!'));
+app.listen(5339, () => console.log('App listening on port 5339!'));
+
