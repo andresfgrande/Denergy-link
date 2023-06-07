@@ -43,7 +43,7 @@ contract EnergyApiConsumer is ChainlinkClient, ConfirmedOwner {
         operatorContract = _operatorAddress;
     }
 
-    function requestEnergyPrice(/*address _oracle, string memory _jobId*/) public onlyOwner {
+    function requestEnergyPrice() public onlyOwner {
         Chainlink.Request memory req = buildChainlinkRequest(
             stringToBytes32(jobId),
             address(this),
