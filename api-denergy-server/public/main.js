@@ -1,4 +1,4 @@
-const baseUrl = `${window.location.protocol}//${window.location.hostname}:5339`;
+const baseUrl = `${window.location.protocol}//${window.location.hostname}`;
 
 /**
  * Simulation: call from IoT device for registering produced energy
