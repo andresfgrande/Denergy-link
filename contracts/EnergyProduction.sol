@@ -4,6 +4,12 @@ pragma solidity ^0.8.0;
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 import "https://github.com/bokkypoobah/BokkyPooBahsDateTimeLibrary/blob/master/contracts/BokkyPooBahsDateTimeLibrary.sol";
 
+/**
+ *  Mumbai network
+ *  This Contract Address : 0xf74b7507C29E3eE7453b05E6c086a55cDE12a0F9
+ *  EnergyConsumption Contract : 0x5f097B1D6811E0948D60b9c8Aa17fCcB98128845
+ */
+
 contract EnergyProduction {
     
     struct ProductionData {
@@ -82,7 +88,6 @@ contract EnergyProduction {
         return uint256(price); // wei USD
     }
 
-    //                                        viene en kWh       viene en wei USD la calculo en el  server(cambio EUR/USD)
     function registerEnergyProduction(uint256 _energyProduced, uint256 _productionCost) public onlyOwner {
         uint256 timestamp = block.timestamp;
         uint256 year = getCurrentYear(timestamp);

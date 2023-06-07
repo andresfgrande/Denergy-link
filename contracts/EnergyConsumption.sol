@@ -4,12 +4,20 @@ pragma solidity ^0.8.0;
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 import "https://github.com/bokkypoobah/BokkyPooBahsDateTimeLibrary/blob/master/contracts/BokkyPooBahsDateTimeLibrary.sol";
 import "./EnergyProduction.sol";
+import "./EnergyApiConsumer.sol";
+
+/**
+ *  Mumbai network
+ *  This Contract Address : 0x5f097B1D6811E0948D60b9c8Aa17fCcB98128845
+ *  EnergyProduction Contract : 0xf74b7507C29E3eE7453b05E6c086a55cDE12a0F9
+ *  EnergyApiConsumer : 0x91bD19A582aE9d34cb4fb949C355385c0cEa0aC4
+ */
 
 contract EnergyConsumption {
 
     struct MonthlyData {
         uint256 consumedEnergy;
-        uint256 billAmount; //wei Euros
+        uint256 billAmount; //wei USD
         bool paid;
     }
 
@@ -17,13 +25,17 @@ contract EnergyConsumption {
         mapping(uint256 => MonthlyData) monthlyData;
         uint256[] consumptionMonths;
         mapping(uint256 => bool) hasMonth;
-        uint256 totalUnpaidBillAmount; //wei Euros
+        uint256 totalUnpaidBillAmount; //wei USD
     }
 
     address payable public owner;
     mapping(address => Consumer) public consumers;
+
     // The address of the EnergyProduction contract
     EnergyProduction public energyProductionContract;
+
+    // The address of the contract to get the updated price of energy
+    EnergyApiConsumer public energyApiConsumerContract;
 
     AggregatorV3Interface internal priceFeedEth;
     AggregatorV3Interface internal priceFeedEur;
@@ -57,15 +69,20 @@ contract EnergyConsumption {
      * Aggregator: EUR/USD
      * Address: 0x7d7356bF6Ee5CDeC22B216581E48eCC700D0497A
      */
-    constructor(address _addressEnergyProductionContract) {
+    constructor(address _addressEnergyProductionContract, address _addressEnergyApiConsumerContract) {
         owner = payable(msg.sender);
         priceFeedEth = AggregatorV3Interface(0x0715A7794a1dc8e42615F059dD6e406A6594651A);
         priceFeedEur = AggregatorV3Interface(0x7d7356bF6Ee5CDeC22B216581E48eCC700D0497A);
         energyProductionContract = EnergyProduction(_addressEnergyProductionContract);
+        energyApiConsumerContract = EnergyApiConsumer(_addressEnergyApiConsumerContract);
     }
 
     function setAddressEnergyConsumptionContract(address _addressEnergyProductionContract) public onlyOwner{
          energyProductionContract = EnergyProduction(_addressEnergyProductionContract);
+    }
+
+    function setAddressEnergyApiConsumerContract(address _addressEnergyApiConsumerContract) public onlyOwner{
+        energyApiConsumerContract = EnergyApiConsumer(_addressEnergyApiConsumerContract);
     }
 
     function getLatestEthPrice() public view returns (uint256) {
@@ -79,12 +96,12 @@ contract EnergyConsumption {
     }
 
     function getLatestEnergyPrice() public view returns (uint256){
-        //Example value, this will be retrieved form external adapter
-
-        uint256 energyPriceEur = 172040000000000000; //in wei Euros 0,17204 €/kWh
+       
+        // Current Energy Price retrived with Chainlink oracle
+        uint256 energyPriceEur = energyApiConsumerContract.getCurrentEnergyPrice();
         uint256 eurUsdRate = getLatestEurPrice(); //in wei USD
 
-        return (energyPriceEur * eurUsdRate) / 10**8; // in wei USD per kWh, 0,184 $/kWh
+        return (energyPriceEur * eurUsdRate) / 10**8; // in wei USD per kWh
     }
 
     function registerEnergyConsumptionTest(address _consumer, uint256 _consumedEnergy, uint256 timestamp) public onlyOwner {
@@ -92,10 +109,10 @@ contract EnergyConsumption {
         uint256 month = getCurrentMonth(timestamp);
         uint256 key = year * 100 + month;
 
-        uint256 ratePerKWh = getLatestEnergyPrice(); //in wei Euros
-        uint256 billAmount = _consumedEnergy * ratePerKWh; //in wei Euros
+        uint256 ratePerKWh = getLatestEnergyPrice(); //in wei USD
+        uint256 billAmount = _consumedEnergy * ratePerKWh; //in wei USD
 
-        //Updating billAmount in wei Euros
+        //Updating billAmount in wei USD
         consumers[_consumer].monthlyData[key].consumedEnergy += _consumedEnergy;
         consumers[_consumer].monthlyData[key].billAmount += billAmount;
         consumers[_consumer].monthlyData[key].paid = false;
@@ -117,10 +134,10 @@ contract EnergyConsumption {
         uint256 month = getCurrentMonth(timestamp);
         uint256 key = year * 100 + month;
 
-        uint256 ratePerKWh = getLatestEnergyPrice(); //in wei Euros
-        uint256 billAmount = _consumedEnergy * ratePerKWh; //in wei Euros
+        uint256 ratePerKWh = getLatestEnergyPrice(); //in wei USD
+        uint256 billAmount = _consumedEnergy * ratePerKWh; //in wei USD
 
-        //Updating billAmount in wei Euros
+        //Updating billAmount in wei USD
         consumers[_consumer].monthlyData[key].consumedEnergy += _consumedEnergy;
         consumers[_consumer].monthlyData[key].billAmount += billAmount;
         consumers[_consumer].monthlyData[key].paid = false;
@@ -161,7 +178,7 @@ contract EnergyConsumption {
 
         uint256 key = _year * 100 + _month;
         uint256 billAmount = consumers[msg.sender].monthlyData[key].billAmount;
-        uint256 billAmountInWeiEther = billAmount / getLatestEthPrice(); // conversion from weiEuro to weiEther
+        uint256 billAmountInWeiEther = billAmount / getLatestEthPrice(); // conversion from weiUSD to weiEther
 
         require(!consumers[msg.sender].monthlyData[key].paid, "Bill is already paid");
         require(msg.value >= billAmountInWeiEther, "Payment is less than the outstanding bill amount");

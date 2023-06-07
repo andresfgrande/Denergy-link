@@ -6,9 +6,9 @@ import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
 
 /**
  *  Mumbai network
- *  This Contract Address : 0xE30AD66151a772F3fc1182e57c3E56062c6352c3
- *  Oracle Operator       : 0xBeDd97b7a1490933C5040C3Dc4F6Bf36A1c69e5A
- *  Job ID                : "2cd01d652ca345468fc94f211ff1f5ad"
+ *  This Contract Address : 0x91bD19A582aE9d34cb4fb949C355385c0cEa0aC4
+ *  Oracle Operator : 0xBeDd97b7a1490933C5040C3Dc4F6Bf36A1c69e5A
+ *  Job ID : "2cd01d652ca345468fc94f211ff1f5ad"
  */
 
 contract EnergyApiConsumer is ChainlinkClient, ConfirmedOwner {
@@ -64,6 +64,10 @@ contract EnergyApiConsumer is ChainlinkClient, ConfirmedOwner {
     ) public recordChainlinkFulfillment(_requestId) {
         emit RequestEnergyPriceFulfilled(_requestId, _price);
         currentEnergyPrice = _price;
+    }
+
+    function getCurrentEnergyPrice() public view returns (uint256){
+        return currentEnergyPrice;
     }
 
     function getChainlinkToken() public view returns (address) {
