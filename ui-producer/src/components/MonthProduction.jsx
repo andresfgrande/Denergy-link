@@ -91,13 +91,13 @@ export default function MonthProduction({setAddress, setBalance, setEnergyProduc
                 </div>
                 <div className="card card--revenue">
                     <h3 className="card--title">Revenue</h3>
-                    <h1 className="energy--num--eth">{Number.parseFloat(revenue).toFixed(4)} ETH</h1>
+                    <h1 className="energy--num--eth">{Number.parseFloat(revenue/ethPrice).toFixed(4)} ETH</h1>
                     <h3 className="energy--num--usd">${Number.parseFloat(revenue).toFixed(2)}</h3>
                 </div>
             </div>
             <div className={(revenue - cost) > 0 ? "card last--element card--profit":"card last--element card--profit negative"}>
                 <h2 className="card--title">Profit</h2>
-                <h1 className="energy--num--eth">{Number.parseFloat(revenue - cost).toFixed(4)} ETH</h1>
+                <h1 className="energy--num--eth">{Number.parseFloat((revenue - cost)/ethPrice).toFixed(4)} ETH</h1>
                 <h3 className="energy--num--usd">${Number.parseFloat(revenue - cost).toFixed(2)}</h3>
             </div>
         </div>

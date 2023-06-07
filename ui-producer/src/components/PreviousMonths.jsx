@@ -97,8 +97,8 @@ export default function PreviousMonths({setAddress, setBalance, setEnergyProduce
                             <td>{row.month} / {row.year}</td>
                             <td>{row.produced}</td>
                             <td>{row.consumed}</td>
-                            <td>${Number.parseFloat(row.revenue).toFixed(2)} </td>
-                            <td>${Number.parseFloat(row.cost).toFixed(2)} </td>
+                            <td>{Number.parseFloat(row.revenue/ethPrice).toFixed(4)} ETH = ${Number.parseFloat(row.revenue).toFixed(2)} </td>
+                            <td>{Number.parseFloat(row.cost/ethPrice).toFixed(4)} ETH = ${Number.parseFloat(row.cost).toFixed(2)} </td>
                         </tr>
                     ))}
                 </tbody>
