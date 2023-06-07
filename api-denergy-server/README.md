@@ -1,4 +1,4 @@
-# Energy Contract API Documentation
+# Denergry API Server Documentation
 
 This documentation provides an overview of the endpoints provided by our API.
 
