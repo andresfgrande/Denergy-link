@@ -5,53 +5,65 @@ import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
 import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
 
 /**
- * Contract Address : 0xBa676EAeaB84c299BbaA0932b1996F44CB38be29
- * Job ID           : "2cd01d652ca345468fc94f211ff1f5ad"
+ *  Mumbai network
+ *  This Contract Address : 0xE30AD66151a772F3fc1182e57c3E56062c6352c3
+ *  Oracle Operator       : 0xBeDd97b7a1490933C5040C3Dc4F6Bf36A1c69e5A
+ *  Job ID                : "2cd01d652ca345468fc94f211ff1f5ad"
  */
 
-contract ATestnetConsumer is ChainlinkClient, ConfirmedOwner {
+contract EnergyApiConsumer is ChainlinkClient, ConfirmedOwner {
     using Chainlink for Chainlink.Request;
 
     uint256 private constant ORACLE_PAYMENT = (1 * LINK_DIVISIBILITY) / 10; // 0.1 * 10**18
-    uint256 public currentPrice;
+    uint256 public currentEnergyPrice;
 
-    event RequestEthereumPriceFulfilled(
+    address public operatorContract;
+    string public jobId;
+
+    event RequestEnergyPriceFulfilled(
         bytes32 indexed requestId,
         uint256 indexed price
     );
 
     /**
-     *  Mumbai
+     *  Mumbai network
      *  LINK address in Mumbai network: 0x326C977E6efc84E512bB9C30f76E30c160eD06FB
      */
-    constructor() ConfirmedOwner(msg.sender) {
+    constructor(address _operatorAddress, string memory _jobId) ConfirmedOwner(msg.sender) {
+        operatorContract = _operatorAddress;
+        jobId = _jobId;
         setChainlinkToken(0x326C977E6efc84E512bB9C30f76E30c160eD06FB);
     }
 
-    function requestEthereumPrice(
-        address _oracle,
-        string memory _jobId
-    ) public onlyOwner {
+    function setJobId (string memory _jobId) public onlyOwner{
+        jobId = _jobId;
+    }
+
+    function setOperatorAddress (address _operatorAddress) public onlyOwner{
+        operatorContract = _operatorAddress;
+    }
+
+    function requestEnergyPrice(/*address _oracle, string memory _jobId*/) public onlyOwner {
         Chainlink.Request memory req = buildChainlinkRequest(
-            stringToBytes32(_jobId),
+            stringToBytes32(jobId),
             address(this),
-            this.fulfillEthereumPrice.selector
+            this.fulfillEnergyPrice.selector
         );
         req.add(
             "get",
             "https://api.preciodelaluz.org/v1/prices/now?zone=PCB"
         );
         req.add("path", "price");
-        req.addInt("times", 100);
-        sendChainlinkRequestTo(_oracle, req, ORACLE_PAYMENT);
+        req.addInt("times", 1e15); //price in wei
+        sendChainlinkRequestTo(operatorContract, req, ORACLE_PAYMENT);
     }
 
-    function fulfillEthereumPrice(
+    function fulfillEnergyPrice(
         bytes32 _requestId,
         uint256 _price
     ) public recordChainlinkFulfillment(_requestId) {
-        emit RequestEthereumPriceFulfilled(_requestId, _price);
-        currentPrice = _price;
+        emit RequestEnergyPriceFulfilled(_requestId, _price);
+        currentEnergyPrice = _price;
     }
 
     function getChainlinkToken() public view returns (address) {
@@ -89,7 +101,6 @@ contract ATestnetConsumer is ChainlinkClient, ConfirmedOwner {
         }
 
         assembly {
-            // solhint-disable-line no-inline-assembly
             result := mload(add(source, 32))
         }
     }

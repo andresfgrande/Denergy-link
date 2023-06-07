@@ -132,5 +132,33 @@ app.post('/registerEnergyConsumptionTest', async (req, res) => {
     }
 });
 
+/****************************/
+
+function calculateHourDelay(){
+    const currentTime = new Date();
+    const nextHour = new Date();
+    nextHour.setHours(nextHour.getHours() + 1);
+    nextHour.setMinutes(0);
+    nextHour.setSeconds(0);
+    const delay = nextHour - currentTime;
+    return delay;
+}
+
+function executeEveryHour() {
+    
+    var delay = calculateHourDelay();
+
+    /****/
+     //TODO: call contracto to update energy price every hour
+    /*****/
+
+    // Schedule the next execution at the start of the next hour
+    setTimeout(executeEveryHour, delay);
+}
+  
+  // Calculate initial delay
+  var delay = calculateHourDelay();
+  setTimeout(executeEveryHour, initialDelay);
+
 app.listen(5339, () => console.log('App listening on port 5339!'));
 
