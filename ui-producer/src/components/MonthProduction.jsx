@@ -9,7 +9,7 @@ export default function MonthProduction({setAddress, setBalance, setEnergyProduc
         try {
         
             const web3 = new Web3(Web3.givenProvider);
-            const contractAddr = '0x3b059F2aBd2A677406E04Bf379bF20C92e51CEe5'; 
+            const contractAddr = '0xf74b7507C29E3eE7453b05E6c086a55cDE12a0F9'; 
             const energyProductionContract = new web3.eth.Contract(EnergyProductionAbi, contractAddr);
             const key = year * 100 + month;
             const result = await energyProductionContract.methods.monthlyProductionData(key).call();

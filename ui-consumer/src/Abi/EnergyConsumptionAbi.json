@@ -5,6 +5,11 @@
 				"internalType": "address",
 				"name": "_addressEnergyProductionContract",
 				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_addressEnergyApiConsumerContract",
+				"type": "address"
 			}
 		],
 		"stateMutability": "nonpayable",
@@ -86,6 +91,19 @@
 				"internalType": "uint256",
 				"name": "totalUnpaidBillAmount",
 				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "energyApiConsumerContract",
+		"outputs": [
+			{
+				"internalType": "contract EnergyApiConsumer",
+				"name": "",
+				"type": "address"
 			}
 		],
 		"stateMutability": "view",
@@ -388,6 +406,19 @@
 			}
 		],
 		"name": "registerEnergyConsumptionTest",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_addressEnergyApiConsumerContract",
+				"type": "address"
+			}
+		],
+		"name": "setAddressEnergyApiConsumerContract",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"

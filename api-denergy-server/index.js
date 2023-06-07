@@ -17,8 +17,8 @@ app.use(express.static(path.join(__dirname, 'public'))); // Statc files in direc
 const web3 = new Web3(new Web3.providers.HttpProvider(process.env.WEB3_PROVIDER_URL));
 
 // Set contract details
-const contractProductionAddress = '0x3b059F2aBd2A677406E04Bf379bF20C92e51CEe5';
-const contractConsumptionAddress = '0xc4364bF88dA24A547658a25386bb49a2c08Ee609'; 
+const contractProductionAddress = '0xf74b7507C29E3eE7453b05E6c086a55cDE12a0F9';
+const contractConsumptionAddress = '0x5f097B1D6811E0948D60b9c8Aa17fCcB98128845'; 
 const contract = new web3.eth.Contract(productionAbi, contractProductionAddress);
 const contractConsumption = new web3.eth.Contract(consumptionAbi, contractConsumptionAddress); // Create a new web3 instance for the consumption contract
 

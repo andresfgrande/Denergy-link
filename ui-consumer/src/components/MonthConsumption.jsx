@@ -15,7 +15,7 @@ export default function MonthConsumption({setYear, setMonth, setTotalUnpaid, set
     if (window.ethereum) {
       const web3 = new Web3(window.ethereum);
       const contractAbi = EnergyConsumptionAbi;
-      const contractAddress = "0xc4364bF88dA24A547658a25386bb49a2c08Ee609";
+      const contractAddress = "0x5f097B1D6811E0948D60b9c8Aa17fCcB98128845";
       const contract = new web3.eth.Contract(contractAbi, contractAddress);
       
       const currentYear = year;
@@ -50,7 +50,7 @@ export default function MonthConsumption({setYear, setMonth, setTotalUnpaid, set
       if (window.ethereum) {
         const web3 = new Web3(window.ethereum);
         const contractAbi = EnergyConsumptionAbi;
-        const contractAddress = "0xc4364bF88dA24A547658a25386bb49a2c08Ee609";
+        const contractAddress = "0x5f097B1D6811E0948D60b9c8Aa17fCcB98128845";
         const contract = new web3.eth.Contract(contractAbi, contractAddress);
   
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });

@@ -16,7 +16,7 @@ export default function PreviousMonths({setAddress, setBalance, setEnergyProduce
         if (window.ethereum) {
           const web3 = new Web3(window.ethereum);
           const contractAbi = EnergyProductionAbi;
-          const contractAddress = "0x3b059F2aBd2A677406E04Bf379bF20C92e51CEe5";  // Update with the correct contract address
+          const contractAddress = "0xf74b7507C29E3eE7453b05E6c086a55cDE12a0F9";  // Update with the correct contract address
           const contract = new web3.eth.Contract(contractAbi, contractAddress);
     
           const fetchMonthlyData = async () => {
