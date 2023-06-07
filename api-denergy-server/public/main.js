@@ -45,7 +45,7 @@ document.getElementById('consumption-form').addEventListener('submit', function(
     const processingElement = document.getElementById('processing2');
     processingElement.style.display = 'block';
 
-    fetch('http://localhost:3000/registerEnergyConsumption', {
+    fetch(`${baseUrl}/registerEnergyConsumption`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ document.getElementById('production-test-form').addEventListener('submit', funct
     // Convert date string into timestamp in seconds
     const timestamp = Math.floor(new Date(timestampInput).getTime() / 1000);
 
-    fetch('http://localhost:3000/registerEnergyProductionTest', {
+    fetch(`${baseUrl}/registerEnergyProductionTest`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -114,7 +114,7 @@ document.getElementById('consumption-test-form').addEventListener('submit', func
     // Convert date string into timestamp in seconds
     const timestamp = Math.floor(new Date(timestampInput).getTime() / 1000);
 
-    fetch('http://localhost:3000/registerEnergyConsumptionTest', {
+    fetch(`${baseUrl}/registerEnergyConsumptionTest`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
