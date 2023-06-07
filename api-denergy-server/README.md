@@ -26,5 +26,17 @@ This base URL represents the root of the API.
 
 ```json
 {
-    "energyProduced": "<energy produced in kilowatts>"
+    "energyProduced": "<energy produced in kWh>"
+}
+
+### 3. Register Energy Consumption
+
+- **URL:** `/registerEnergyConsumption`
+- **Method:** `POST`
+- **Data Params:**
+
+```json
+{
+    "consumerAddress": "<consumer's Ethereum address>",
+    "consumedEnergy": "<energy consumed in kWh>" 
 }
