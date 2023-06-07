@@ -157,7 +157,7 @@ function executeEveryHour() {
 }
   
   // Calculate initial delay
-  var delay = calculateHourDelay();
+  var initialDelay = calculateHourDelay();
   setTimeout(executeEveryHour, initialDelay);
 
 app.listen(5339, () => console.log('App listening on port 5339!'));
