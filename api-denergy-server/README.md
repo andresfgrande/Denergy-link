@@ -10,8 +10,6 @@ http://localhost:3000
 
 This base URL represents the root of the API.
 
-## Endpoints
-
 ## Installation
 
 To run this project locally, follow these steps:
@@ -32,6 +30,7 @@ To run this project locally, follow these steps:
     node index.js
     ```
 
+## Endpoints
 
 ### 1. Home Page
 
