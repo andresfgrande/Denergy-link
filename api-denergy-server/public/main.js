@@ -68,6 +68,9 @@ document.getElementById('consumption-form').addEventListener('submit', function(
     });
 });
 
+/**
+ * Simulation: call from IoT device for registering produced energy for a certain moment of time
+ */
 document.getElementById('production-test-form').addEventListener('submit', function(event) {
     event.preventDefault();
 
@@ -102,6 +105,9 @@ document.getElementById('production-test-form').addEventListener('submit', funct
     });
 });
 
+/**
+ * Simulation: call from IoT device for registering consumed energy for a certain moment of time
+ */
 document.getElementById('consumption-test-form').addEventListener('submit', function(event) {
     event.preventDefault();
 

@@ -2,6 +2,7 @@
 <html>
     <head>
         <title>Energy Registration</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" href="styles.css">
     </head>
     <body>
@@ -9,7 +10,7 @@
        
         <form id="energy-form">
             <h2>Energy Production Iot device</h2>
-            <label for="energyProduced">Energy Produced:</label>
+            <label for="energyProduced">Energy Produced in kWh: Ex. 150 for 150kWh</label>
             <input type="number" id="energyProduced" name="energyProduced" required><br>
             <input type="submit" value="Send transaction">
             <p id="processing1" style="display: none;">Processing...</p>
@@ -19,7 +20,7 @@
             <h2>Energy Consumption Iot device</h2>
             <label for="consumerAddress">Consumer Address:</label>
             <input type="text" id="consumerAddress" name="consumerAddress" required><br>
-            <label for="consumedEnergy">Consumed Energy:</label>
+            <label for="consumedEnergy">Consumed Energy in kWh: Ex. 150 for 150kWh</label>
             <input type="number" id="consumedEnergy" name="consumedEnergy" required><br>
             <input type="submit" value="Send transaction">
             <p id="processing2" style="display: none;">Processing...</p>
@@ -27,7 +28,7 @@
 
         <form id="production-test-form">
             <h2>Energy Production Test</h2>
-            <label for="energyProducedTest">Energy Produced:</label>
+            <label for="energyProducedTest">Energy Produced in kWh: Ex. 150 for 150kWh</label>
             <input type="number" id="energyProducedTest" name="energyProducedTest" required><br>
             <label for="timestampTest">Timestamp:</label>
             <input type="datetime-local" id="timestampTest" name="timestampTest" required><br>
@@ -39,7 +40,7 @@
             <h2>Energy Consumption Test</h2>
             <label for="consumerAddressTest">Consumer Address:</label>
             <input type="text" id="consumerAddressTest" name="consumerAddressTest" required><br>
-            <label for="consumedEnergyTest">Consumed Energy:</label>
+            <label for="consumedEnergyTest">Consumed Energy in kWh: Ex. 150 for 150kWh</label>
             <input type="number" id="consumedEnergyTest" name="consumedEnergyTest" required><br>
             <label for="timestampTestCon">Timestamp:</label>
             <input type="datetime-local" id="timestampTestCon" name="timestampTestCon" required><br>

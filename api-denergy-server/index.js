@@ -5,6 +5,7 @@ const Web3 = require('web3');
 require('dotenv').config();
 const productionAbi = require('./Abi/EnergyProductionAbi.json');
 const consumptionAbi = require('./Abi/EnergyConsumptionAbi.json');
+const energyApiConsumerAbi = require('./Abi/EnergyApiConsumerAbi.json');
 const path = require('path');
 
 // Configuration
@@ -19,8 +20,10 @@ const web3 = new Web3(new Web3.providers.HttpProvider(process.env.WEB3_PROVIDER_
 // Set contract details
 const contractProductionAddress = '0xf74b7507C29E3eE7453b05E6c086a55cDE12a0F9';
 const contractConsumptionAddress = '0x5f097B1D6811E0948D60b9c8Aa17fCcB98128845'; 
+const contractEnergyApiConsumerAddress = '0x91bD19A582aE9d34cb4fb949C355385c0cEa0aC4';  
 const contract = new web3.eth.Contract(productionAbi, contractProductionAddress);
-const contractConsumption = new web3.eth.Contract(consumptionAbi, contractConsumptionAddress); // Create a new web3 instance for the consumption contract
+const contractConsumption = new web3.eth.Contract(consumptionAbi, contractConsumptionAddress); 
+const contractEnergyApiConsumer = new web3.eth.Contract(energyApiConsumerAbi, contractEnergyApiConsumerAddress);
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
@@ -144,19 +147,51 @@ function calculateHourDelay(){
     return delay;
 }
 
-function executeEveryHour() {
+async function executeEveryHour() {
     
     var delay = calculateHourDelay();
 
-    /****/
-     //TODO: call contracto to update energy price every hour
-    /*****/
+    // Call requestEnergyPrice from EnergyApiConsumer contract for update energy price value
+    const functionAbi = contractEnergyApiConsumer.methods.requestEnergyPrice().encodeABI();
+    const tx = {
+        from: '0x626DB02134CB1E1a61483057a61315801809a71c',
+        to: contractEnergyApiConsumerAddress,
+        gas: 2000000,
+        data: functionAbi,
+    };
+
+    try {
+        const privateKey = process.env.MY_PRIVATE_KEY;
+        const signedTx = await web3.eth.accounts.signTransaction(tx, privateKey);
+        await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+    } catch (error) {
+        console.error(`Failed to call requestEnergyPrice: ${error.toString()}`);
+    }
 
     // Schedule the next execution at the start of the next hour
     setTimeout(executeEveryHour, delay);
 }
+
+async function firstExecution(){
+    // Calculate initial delay and initial execution to update energy price
+    const functionAbi = contractEnergyApiConsumer.methods.requestEnergyPrice().encodeABI();
+    const tx = {
+        from: '0x626DB02134CB1E1a61483057a61315801809a71c',
+        to: contractEnergyApiConsumerAddress,
+        gas: 2000000,
+        data: functionAbi,
+    };
+
+    try {
+        const privateKey = process.env.MY_PRIVATE_KEY;
+        const signedTx = await web3.eth.accounts.signTransaction(tx, privateKey);
+        await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+    } catch (error) {
+        console.error(`Failed to call requestEnergyPrice: ${error.toString()}`);
+    }
+}
   
-  // Calculate initial delay
+  firstExecution();
   var initialDelay = calculateHourDelay();
   setTimeout(executeEveryHour, initialDelay);
 
