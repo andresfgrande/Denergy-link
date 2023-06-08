@@ -41,14 +41,14 @@ app.post('/registerEnergyProduction', async (req, res) => {
     const functionAbi = contract.methods.registerEnergyProduction(energyProduced, productionCost).encodeABI();
 
     const tx = {
-        from: '0x626DB02134CB1E1a61483057a61315801809a71c',
+        from: process.env.OWNER_ADDRESS,
         to: contractProductionAddress,
         gas: 2000000,
         data: functionAbi,
     };
 
     try {
-        const privateKey = process.env.MY_PRIVATE_KEY;
+        const privateKey = process.env.OWNER_PRIVATE_KEY;
         const signedTx = await web3.eth.accounts.signTransaction(tx, privateKey);
         const result = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
         res.send({ transactionHash: result.transactionHash });
@@ -66,14 +66,14 @@ app.post('/registerEnergyConsumption', async (req, res) => {
     const functionAbi = contractConsumption.methods.registerEnergyConsumption(consumerAddress, consumedEnergy).encodeABI();
 
     const tx = {
-        from: '0x626DB02134CB1E1a61483057a61315801809a71c',
+        from: process.env.OWNER_ADDRESS,
         to: contractConsumptionAddress,
         gas: 2000000,
         data: functionAbi,
     };
 
     try {
-        const privateKey = process.env.MY_PRIVATE_KEY;
+        const privateKey = process.env.OWNER_PRIVATE_KEY;
         const signedTx = await web3.eth.accounts.signTransaction(tx, privateKey);
         const result = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
         res.send({ transactionHash: result.transactionHash });
@@ -94,14 +94,14 @@ app.post('/registerEnergyProductionTest', async (req, res) => {
     const functionAbi = contract.methods.registerEnergyProductionTest(energyProduced, productionCost, timestamp).encodeABI();
 
     const tx = {
-        from: '0x626DB02134CB1E1a61483057a61315801809a71c',
+        from: process.env.OWNER_ADDRESS,
         to: contractProductionAddress,
         gas: 2000000,
         data: functionAbi,
     };
 
     try {
-        const privateKey = process.env.MY_PRIVATE_KEY;
+        const privateKey = process.env.OWNER_PRIVATE_KEY;
         const signedTx = await web3.eth.accounts.signTransaction(tx, privateKey);
         const result = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
         res.send({ transactionHash: result.transactionHash });
@@ -119,14 +119,14 @@ app.post('/registerEnergyConsumptionTest', async (req, res) => {
     const functionAbi = contractConsumption.methods.registerEnergyConsumptionTest(consumerAddress, consumedEnergy, timestamp).encodeABI();
 
     const tx = {
-        from: '0x626DB02134CB1E1a61483057a61315801809a71c',
+        from: process.env.OWNER_ADDRESS,
         to: contractConsumptionAddress,
         gas: 2000000,
         data: functionAbi,
     };
 
     try {
-        const privateKey = process.env.MY_PRIVATE_KEY;
+        const privateKey = process.env.OWNER_PRIVATE_KEY;
         const signedTx = await web3.eth.accounts.signTransaction(tx, privateKey);
         const result = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
         res.send({ transactionHash: result.transactionHash });
@@ -154,14 +154,14 @@ async function executeEveryHour() {
     // Call requestEnergyPrice from EnergyApiConsumer contract for update energy price value
     const functionAbi = contractEnergyApiConsumer.methods.requestEnergyPrice().encodeABI();
     const tx = {
-        from: '0x626DB02134CB1E1a61483057a61315801809a71c',
+        from: process.env.OWNER_ADDRESS,
         to: contractEnergyApiConsumerAddress,
         gas: 2000000,
         data: functionAbi,
     };
 
     try {
-        const privateKey = process.env.MY_PRIVATE_KEY;
+        const privateKey = process.env.OWNER_PRIVATE_KEY;
         const signedTx = await web3.eth.accounts.signTransaction(tx, privateKey);
         await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
     } catch (error) {
@@ -176,14 +176,14 @@ async function firstExecution(){
     // Calculate initial delay and initial execution to update energy price
     const functionAbi = contractEnergyApiConsumer.methods.requestEnergyPrice().encodeABI();
     const tx = {
-        from: '0x626DB02134CB1E1a61483057a61315801809a71c',
+        from: process.env.OWNER_ADDRESS,
         to: contractEnergyApiConsumerAddress,
         gas: 2000000,
         data: functionAbi,
     };
 
     try {
-        const privateKey = process.env.MY_PRIVATE_KEY;
+        const privateKey = process.env.OWNER_PRIVATE_KEY;
         const signedTx = await web3.eth.accounts.signTransaction(tx, privateKey);
         await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
     } catch (error) {

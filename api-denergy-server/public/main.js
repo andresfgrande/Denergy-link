@@ -10,6 +10,7 @@ document.getElementById('energy-form').addEventListener('submit', function(event
     const processingElement = document.getElementById('processing1');
     processingElement.style.display = 'block';
 
+    //For local environment use 'http://localhost:5339/ instead of baseUrl'
     fetch(`${baseUrl}/registerEnergyProduction`, {
         method: 'POST',
         headers: {
@@ -45,6 +46,7 @@ document.getElementById('consumption-form').addEventListener('submit', function(
     const processingElement = document.getElementById('processing2');
     processingElement.style.display = 'block';
 
+    //For local environment use 'http://localhost:5339/ instead of baseUrl'
     fetch(`${baseUrl}/registerEnergyConsumption`, {
         method: 'POST',
         headers: {
@@ -82,6 +84,7 @@ document.getElementById('production-test-form').addEventListener('submit', funct
     // Convert date string into timestamp in seconds
     const timestamp = Math.floor(new Date(timestampInput).getTime() / 1000);
 
+    //For local environment use 'http://localhost:5339/ instead of baseUrl'
     fetch(`${baseUrl}/registerEnergyProductionTest`, {
         method: 'POST',
         headers: {
@@ -120,6 +123,7 @@ document.getElementById('consumption-test-form').addEventListener('submit', func
     // Convert date string into timestamp in seconds
     const timestamp = Math.floor(new Date(timestampInput).getTime() / 1000);
 
+    //For local environment use 'http://localhost:5339/ instead of baseUrl'
     fetch(`${baseUrl}/registerEnergyConsumptionTest`, {
         method: 'POST',
         headers: {

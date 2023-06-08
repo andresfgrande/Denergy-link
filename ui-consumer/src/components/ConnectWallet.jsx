@@ -5,6 +5,7 @@ import Web3 from 'web3';
 export default function ConnectWallet({ setAddress, setBalance , address, balance}) {
 
   const [copySuccess, setCopySuccess] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
 
     useEffect(() => {
 
@@ -65,27 +66,50 @@ export default function ConnectWallet({ setAddress, setBalance , address, balanc
             setCopySuccess("");
         }, 3000);
     }
-}, [copySuccess]);
+  }, [copySuccess]);
+
+  useEffect(() => {
+    if (!address) {
+      setShowPopup(true);
+    }
+  }, [address]);
+
+  const closePopup = () => {
+    setShowPopup(false);
+  }
 
   return (
-    address ?
-    <div className="header--connected" >
-      <p onClick={copyAddressToClipboard} className="address--copy">
-        <span className="header--connected--title">Wallet: </span>
-        <span className="header--connected--address">{address.substring(0,6) + "..." + address.substring(address.length - 4)}</span>
-        {copySuccess && 
-                    <span className="tooltip">
-                        {copySuccess}
-                    </span>}
-      </p>
-      <p>
-      <span className="header--connected--title">Balance: </span>
-      <span className="header--connected--address">{Number.parseFloat(balance).toFixed(4)}</span>
-      </p>
-        
-    </div>
-    :
-    <div className="header--connect" onClick={connectWallet}>Connect Wallet</div>
+    <>
+    { showPopup && !address &&
+      <div className="backdrop--initial" onClick={closePopup}>
+      <div className="popup--initial">
+          <button className="close--btn--initial" onClick={closePopup}>X</button>
+          <p>Connect your wallet to start</p>
+      </div>
+      </div>
+      
+    } 
+    {
+      address ?
+      <div className="header--connected" >
+        <p onClick={copyAddressToClipboard} className="address--copy">
+          <span className="header--connected--title">Wallet: </span>
+          <span className="header--connected--address">{address.substring(0,6) + "..." + address.substring(address.length - 4)}</span>
+          {copySuccess && 
+                      <span className="tooltip">
+                          {copySuccess}
+                      </span>}
+        </p>
+        <p>
+        <span className="header--connected--title">Balance: </span>
+        <span className="header--connected--address">{Number.parseFloat(balance).toFixed(4)}</span>
+        </p>
+          
+      </div>
+      :
+      <div className="header--connect" onClick={connectWallet}>Connect Wallet</div>
+    }
+    </>
   );
 }
 

@@ -8,6 +8,7 @@ import './style/Header.css'
 import './style/MonthConsumption.css'
 import './style/PreviousMonths.css'
 import './style/Totals.css'
+import './style/InitialPopup.css'
 
 function App() {
   const [address, setAddress] = useState('');

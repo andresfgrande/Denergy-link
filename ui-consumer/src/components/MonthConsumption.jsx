@@ -144,11 +144,11 @@ export default function MonthConsumption({setYear, setMonth, setTotalUnpaid, set
               </span>
         <div className="month--data">
             <div className="energy--consumed">
-                <h1>{energy} kWh</h1>
+                <h1>{energy ? energy : 0} kWh</h1>
             </div>
             <div className="month--bill">
-                <h2>{Number.parseFloat(bill/ethPrice).toFixed(4)} ETH</h2>
-                <h3>${Number.parseFloat(bill).toFixed(2)}</h3>
+                <h2>{bill ? Number.parseFloat(bill/ethPrice).toFixed(4) : 0} ETH</h2>
+                <h3>${bill ? Number.parseFloat(bill).toFixed(2) : 0}</h3>
             </div>
 
             {paid ? 

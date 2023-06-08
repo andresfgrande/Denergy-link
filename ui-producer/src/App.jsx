@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Header from "./components/Header"
 import MonthProduction from './components/MonthProduction';
 import PreviousMonths from './components/PreviousMonths';
@@ -6,6 +6,7 @@ import './App.css';
 import './style/Header.css';
 import './style/MonthProduction.css';
 import './style/PreviousMonths.css';
+import './style/InitialPopup.css';
 
 function App() {
   const [address, setAddress] = useState('');
@@ -17,6 +18,18 @@ function App() {
   const [cost, setCost] = useState(0);
   const [revenue, setRevenue] = useState(0);
   const [ethPrice, setEthPrice] = useState(0);
+  const [showPopup, setShowPopup] = useState(false);
+
+  useEffect(() => {
+    if (!address) {
+      setShowPopup(true);
+    }
+  }, [address]);
+
+  const closePopup = () => {
+    setShowPopup(false);
+  }
+
 
   return (
     <>
