@@ -6,7 +6,7 @@ export default function Totals({setTotalConsumption, setTotalUnpaid, address, to
 
   return (
     <div className="totals--container">
-      <h1>Total consumed</h1>
+      <h1 className="main--title">Total consumed</h1>
       <div className="totals--data">
       <div className="totals--consumed">
         <h1>{totalConsumption} kWh</h1>

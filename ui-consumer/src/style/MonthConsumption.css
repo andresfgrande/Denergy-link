@@ -173,8 +173,8 @@ span.button:active {
   background: #fff;
   padding: 20px;
   border-radius: 10px;
-  max-width: 500px;
-  width: 90%;
+  max-width: 475px;
+  width: 75%;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   position: relative;
   animation-name: animate;
@@ -211,5 +211,30 @@ span.button:active {
   }
   100% {
       transform: scale(1);
+  }
+}
+
+
+@media screen and (max-width: 500px) {
+  .main--title{
+    font-size: 1.5rem
+  }
+  .energy--consumed h1{
+    font-size: 1.5rem
+  }
+  .month--bill h2{
+    font-size: 1.3rem;
+  }
+  .month--bill h3{
+    font-size: 1.1rem;
+  }
+  .month--pending--payment h2{
+    font-size: 1.2rem ;
+  }
+  .totals--consumed h1{
+    font-size: 1.5rem
+  }
+  .header--title{
+    text-align: left;
   }
 }
