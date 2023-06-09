@@ -35,7 +35,7 @@ app.get('/', (req, res) => {
 app.post('/registerEnergyProduction', async (req, res) => {
     let { energyProduced } = req.body;
 
-    let productionCost = 0.055;
+    let productionCost = 0.03 + Math.random() * (0.075 - 0.03); //Simulation of the production energy price
     productionCost = web3.utils.toWei(productionCost.toString(), 'ether'); // Convert productionCost to Wei
 
     const functionAbi = contract.methods.registerEnergyProduction(energyProduced, productionCost).encodeABI();
@@ -88,7 +88,7 @@ app.post('/registerEnergyConsumption', async (req, res) => {
 app.post('/registerEnergyProductionTest', async (req, res) => {
     const { energyProduced, timestamp } = req.body;
 
-    let productionCost = 0.055;
+    let productionCost = 0.03 + Math.random() * (0.075 - 0.03); //Simulation of the production energy price
     productionCost = web3.utils.toWei(productionCost.toString(), 'ether'); // Convert productionCost to Wei
 
     const functionAbi = contract.methods.registerEnergyProductionTest(energyProduced, productionCost, timestamp).encodeABI();
