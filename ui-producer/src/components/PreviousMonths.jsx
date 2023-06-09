@@ -67,7 +67,7 @@ export default function PreviousMonths({setAddress, setBalance, setEnergyProduce
     return(
         <>
         <div className="container--totals">
-            <h1>Totals</h1>
+            <h1 className="container--title">Totals</h1>
             <div className="grid--totals">
                 <div className="card--totals ">
                     <h3 className="card--title--totals">Produced</h3>
@@ -80,7 +80,7 @@ export default function PreviousMonths({setAddress, setBalance, setEnergyProduce
             </div>
         </div>
         <div className="previous--months--container">
-            <h1>Previous months</h1>
+            <h1 className="container--title">Previous months</h1>
             <table className="production--table">
                 <thead>
                     <tr>

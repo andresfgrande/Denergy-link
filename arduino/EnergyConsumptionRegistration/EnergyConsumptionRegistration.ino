@@ -54,11 +54,12 @@ void loop() {
       HTTPClient http;
 
       float energyConsumed = readEnergyConsumed();
+      String consumerAddress = "0xEthereumAddress"; // replace this with the address of the consumer
 
       // Register energy consumption calling API
       http.begin(serverUrl + "/registerEnergyConsumption");
       http.addHeader("Content-Type", "application/json");
-      int httpCode = http.POST("{\"consumedEnergy\":" + String(energyConsumed) + "}");
+      int httpCode = http.POST("{\"consumerAddress\":\"" + consumerAddress + "\", \"consumedEnergy\":" + String(energyConsumed) + "}");
       String payload = http.getString();
       Serial.println("Energy Consumption: HTTP response code: " + String(httpCode));
       Serial.println(payload);

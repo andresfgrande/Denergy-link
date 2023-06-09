@@ -122,3 +122,36 @@ span.button:active {
     background: linear-gradient(90deg, #093d88e8 1.18%, #093d88e8 100%);
     transform: translateY(1px);
 }
+
+@media screen and (max-width: 500px) {
+    .container--title{
+      font-size: 1.5rem
+    }
+    .energy--consumed h1{
+      font-size: 1.5rem
+    }
+    .month--bill h2{
+      font-size: 1.3rem;
+    }
+    .month--bill h3{
+      font-size: 1.1rem;
+    }
+    .month--pending--payment h2{
+      font-size: 1.2rem ;
+    }
+    .totals--consumed h1{
+      font-size: 1.5rem
+    }
+    .header--title{
+      text-align: left;
+    }
+    .card--title{
+        font-size: 1rem;
+    }
+    .production--table th{
+        font-size: 0.8rem;
+    }
+    .energy--num,.energy--num--eth,.energy--num--eth,.num--kwh{
+        font-size: 1.7rem;
+    }
+  }
