@@ -5,7 +5,6 @@ import Web3 from 'web3';
 export default function ConnectWallet({ setAddress, setBalance , address, balance}) {
 
   const [copySuccess, setCopySuccess] = useState("");
-  const [showPopup, setShowPopup] = useState(false);
 
     useEffect(() => {
 
@@ -68,28 +67,10 @@ export default function ConnectWallet({ setAddress, setBalance , address, balanc
     }
   }, [copySuccess]);
 
-  useEffect(() => {
-    if (!address) {
-      setShowPopup(true);
-    }
-  }, [address]);
-
-  const closePopup = () => {
-    setShowPopup(false);
-  }
-
-
+ 
   return (
     <>
-    { showPopup && !address &&
-            <div className="backdrop" onClick={closePopup}>
-            <div className="popup">
-                <button className="close-btn" onClick={closePopup}>X</button>
-                <p>Connect your wallet to start</p>
-            </div>
-            </div>
-          
-    }  
+     
      {     
     address ?
     <div className="header--connected" >
